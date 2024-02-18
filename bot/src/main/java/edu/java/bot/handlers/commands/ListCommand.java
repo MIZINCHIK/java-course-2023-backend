@@ -3,10 +3,10 @@ package edu.java.bot.handlers.commands;
 import com.pengrad.telegrambot.model.Message;
 import edu.java.bot.PrimaveraBot;
 import edu.java.bot.links.Link;
-import net.steppschuh.markdowngenerator.table.Table;
-import net.steppschuh.markdowngenerator.text.code.CodeBlock;
 import java.net.URL;
 import java.util.List;
+import net.steppschuh.markdowngenerator.table.Table;
+import net.steppschuh.markdowngenerator.text.code.CodeBlock;
 
 public class ListCommand extends Command {
     private static final String NAME = "list";
@@ -33,7 +33,8 @@ public class ListCommand extends Command {
                     .map(link -> new Link(link.toString()))
                     .forEach(link -> tableBuilder.addRow(link.getDomain(), link.getUrl().toString()));
                 bot.respondMd(message.chat().id(), message.messageId(),
-                    new CodeBlock(tableBuilder.build().toString(), "Tracked links").toString());
+                    new CodeBlock(tableBuilder.build().toString(), "Tracked links").toString()
+                );
             }
         }
     }
