@@ -15,8 +15,8 @@ public enum LinkDomain {
 
     public static LinkDomain inferDomain(URL url) {
         return switch (url.getHost()) {
-            case "github.com" -> GITHUB;
-            case "stackoverflow.com" -> SOF;
+            case "github.com", "www.github.com" -> GITHUB;
+            case "stackoverflow.com", "www.stackoverflow.com" -> SOF;
             default -> UNSUPPORTED;
         };
     }
