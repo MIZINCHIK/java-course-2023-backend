@@ -27,6 +27,7 @@
         <!-- Other -->
         <jetbrains-annotations.version>24.1.0</jetbrains-annotations.version>
         <java-telegram-bot-api.version>7.0.1</java-telegram-bot-api.version>
+        <markdowngenerator.version>1.3.1.1</markdowngenerator.version>
 
         <!-- Tests -->
         <testcontainers.version>1.19.4</testcontainers.version>

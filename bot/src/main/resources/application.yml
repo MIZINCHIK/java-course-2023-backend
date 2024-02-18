@@ -6,6 +6,8 @@ spring:
     name: bot
   jackson:
     time-zone: UTC
+  config:
+    import: optional:file:.env[.properties]
 
 server:
   port: 8090

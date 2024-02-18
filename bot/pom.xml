@@ -67,9 +67,9 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>me.paulschwarz</groupId>
-            <artifactId>spring-dotenv</artifactId>
-            <version>4.0.0</version>
+            <groupId>net.steppschuh.markdowngenerator</groupId>
+            <artifactId>markdowngenerator</artifactId>
+            <version>${markdowngenerator.version}</version>
         </dependency>
 
         <!-- Tests -->
