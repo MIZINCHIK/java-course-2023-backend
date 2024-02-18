@@ -6,9 +6,14 @@ import java.util.List;
 
 public interface Storage {
     List<URL> getLinksByUserId(Long userId);
+
     void trackLink(Link link, Long userId);
+
     void untrackLink(Link link, Long userId);
+
     void registerUser(Long userId);
+
     boolean isUserRegistered(Long userId);
+
     boolean isLinkTracked(Link link);
 }
