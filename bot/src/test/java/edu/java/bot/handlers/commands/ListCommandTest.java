@@ -4,11 +4,8 @@ import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 import edu.java.bot.PrimaveraBot;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
-import edu.java.bot.links.Link;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -77,7 +74,8 @@ public class ListCommandTest {
             new URI("https://stackoverflow.com").toURL(),
             new URI("https://github.com/232132131").toURL(),
             new URI("https://stackoverflow.com/21312/12321").toURL(),
-            new URI("https://ya.ru").toURL()));
+            new URI("https://ya.ru").toURL()
+        ));
         Command list = new ListCommand();
         list.handle(message, new String[] {"/list"}, bot);
         verify(bot).respondMd(any(), any(), stringCaptor.capture());
