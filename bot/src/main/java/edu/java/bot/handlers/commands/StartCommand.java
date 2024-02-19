@@ -4,7 +4,7 @@ import com.pengrad.telegrambot.model.Message;
 import edu.java.bot.PrimaveraBot;
 
 public class StartCommand extends Command {
-    private static final String NAME = "start";
+    public static final String NAME = "/start";
     private static final String DESCRIPTION = "Register user. No arguments.";
     private static final String ALREADY_REGISTERED = "The user is already registered.";
 

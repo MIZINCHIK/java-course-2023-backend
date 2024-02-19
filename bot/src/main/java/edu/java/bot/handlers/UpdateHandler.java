@@ -4,17 +4,16 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.PrimaveraBot;
 import edu.java.bot.handlers.commands.Command;
-import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import lombok.Getter;
 
 public class UpdateHandler {
     private static final String UNKNOWN_COMMAND = "Choose a command from the menu";
     @Getter
-    private final List<Command> commands;
+    private final Map<String, Command> commands;
     private final PrimaveraBot bot;
 
-    public UpdateHandler(List<Command> commands, PrimaveraBot bot) {
+    public UpdateHandler(Map<String, Command> commands, PrimaveraBot bot) {
         this.commands = commands;
         this.bot = bot;
     }
@@ -25,13 +24,10 @@ public class UpdateHandler {
             return;
         }
         String[] args = message.text().trim().split(" ");
-        Optional<Command> command = commands.stream()
-            .filter(cmd -> cmd.getName().equals(args[0]))
-            .findFirst();
-        if (command.isEmpty()) {
-            bot.respond(message.chat().id(), message.messageId(), UNKNOWN_COMMAND);
+        if (commands.containsKey(args[0])) {
+            commands.get(args[0]).handle(message, args, bot);
         } else {
-            command.get().handle(message, args, bot);
+            bot.respond(message.chat().id(), message.messageId(), UNKNOWN_COMMAND);
         }
     }
 }

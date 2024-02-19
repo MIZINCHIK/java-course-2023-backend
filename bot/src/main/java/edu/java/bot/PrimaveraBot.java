@@ -13,8 +13,9 @@ import edu.java.bot.links.Link;
 import edu.java.bot.storage.Storage;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
-public class PrimaveraBot {
+public class PrimaveraBot implements Storage {
     private final TelegramBot bot;
     private final Storage storage;
 
@@ -23,8 +24,8 @@ public class PrimaveraBot {
         this.storage = storage;
     }
 
-    public void setCommands(List<Command> commands) {
-        bot.execute(new SetMyCommands(commands.stream()
+    public void setCommands(Map<String, Command> commands) {
+        bot.execute(new SetMyCommands(commands.values().stream()
             .map(Command::getCommand)
             .toArray(BotCommand[]::new)));
     }
@@ -47,26 +48,32 @@ public class PrimaveraBot {
             .replyToMessageId(messageId));
     }
 
+    @Override
     public List<URL> getLinksByUserId(Long userId) {
         return storage.getLinksByUserId(userId);
     }
 
+    @Override
     public void trackLink(Link link, Long userId) {
         storage.trackLink(link, userId);
     }
 
+    @Override
     public void untrackLink(Link link, Long userId) {
         storage.untrackLink(link, userId);
     }
 
+    @Override
     public void registerUser(Long userId) {
         storage.registerUser(userId);
     }
 
+    @Override
     public boolean isUserRegistered(Long userId) {
         return storage.isUserRegistered(userId);
     }
 
+    @Override
     public boolean isLinkTracked(Link link) {
         return storage.isLinkTracked(link);
     }

@@ -13,7 +13,7 @@ public abstract class Command {
     private final BotCommand command;
 
     public Command(String command, String description) {
-        this.command = new BotCommand("/" + command, description);
+        this.command = new BotCommand(command, description);
     }
 
     public String getName() {
