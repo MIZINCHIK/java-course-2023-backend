@@ -7,7 +7,7 @@ import net.steppschuh.markdowngenerator.table.Table;
 import net.steppschuh.markdowngenerator.text.code.CodeBlock;
 
 public class HelpCommand extends Command {
-    public static final String NAME = "/help";
+    public static final String NAME = "help";
     private static final String DESCRIPTION = "Show commands. No arguments.";
 
     public HelpCommand() {

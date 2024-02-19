@@ -3,13 +3,13 @@ package edu.java.bot;
 import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.handlers.BotExceptionHandler;
 import edu.java.bot.handlers.UpdateHandler;
+import edu.java.bot.handlers.UpdateHandlerBuilder;
 import edu.java.bot.handlers.commands.HelpCommand;
 import edu.java.bot.handlers.commands.ListCommand;
 import edu.java.bot.handlers.commands.StartCommand;
 import edu.java.bot.handlers.commands.TrackCommand;
 import edu.java.bot.handlers.commands.UntrackCommand;
 import edu.java.bot.storage.DbStorage;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -35,15 +35,12 @@ public class BotRunner implements ApplicationRunner {
     }
 
     private void configureHandler() {
-        handler = new UpdateHandler(
-            Map.of(
-                StartCommand.NAME, new StartCommand(),
-                HelpCommand.NAME, new HelpCommand(),
-                TrackCommand.NAME, new TrackCommand(),
-                UntrackCommand.NAME, new UntrackCommand(),
-                ListCommand.NAME, new ListCommand()
-            ),
-            bot
-        );
+        handler = new UpdateHandlerBuilder(bot)
+            .addCommand(new StartCommand())
+            .addCommand(new HelpCommand())
+            .addCommand(new TrackCommand())
+            .addCommand(new UntrackCommand())
+            .addCommand(new ListCommand())
+            .build();
     }
 }

@@ -6,6 +6,8 @@ import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.PrimaveraBot;
 import edu.java.bot.handlers.commands.Command;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,12 +49,8 @@ public class UpdateHandlerTest {
         Mockito.when(chat.id()).thenReturn(0L);
         Mockito.when(message.messageId()).thenReturn(0);
         Mockito.when(update.message()).thenReturn(message);
-        Mockito.when(cmd1.getName()).thenReturn("/cmd1");
-        Mockito.when(cmd2.getName()).thenReturn("/cmd2");
-        Mockito.when(cmd3.getName()).thenReturn("/cmd3");
-        Mockito.when(cmd4.getName()).thenReturn("/cmd4");
-        List<Command> list = List.of(cmd1, cmd2, cmd3, cmd4);
-        UpdateHandler handler = new UpdateHandler(list, bot);
+        UpdateHandler handler = new UpdateHandlerBuilder(bot)
+            .addCommand(cmd1).addCommand(cmd2).addCommand(cmd3).addCommand(cmd4).build();
         Mockito.when(message.text()).thenReturn("/aaa");
         handler.handleUpdate(update);
         verify(bot).respond(any(), any(), stringCaptor.capture());
@@ -65,8 +63,8 @@ public class UpdateHandlerTest {
         Mockito.when(update.message()).thenReturn(message);
         Mockito.when(cmd1.getName()).thenReturn("/cmd1");
         Mockito.when(cmd2.getName()).thenReturn("/cmd2");
-        List<Command> list = List.of(cmd1, cmd2, cmd3, cmd4);
-        UpdateHandler handler = new UpdateHandler(list, bot);
+        UpdateHandler handler = new UpdateHandlerBuilder(bot)
+            .addCommand(cmd1).addCommand(cmd2).addCommand(cmd3).addCommand(cmd4).build();
         Mockito.when(message.text()).thenReturn("/cmd2");
         handler.handleUpdate(update);
         verify(cmd2).handle(any(), eq(new String[] {"/cmd2"}), eq(bot));
