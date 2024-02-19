@@ -10,7 +10,7 @@ import net.steppschuh.markdowngenerator.text.code.CodeBlock;
 import static edu.java.bot.links.Link.isLinkCorrect;
 
 public class ListCommand extends Command {
-    private static final String NAME = "list";
+    public static final String NAME = "/list";
     private static final String DESCRIPTION = "List the links being tracked. No arguments.";
     private static final String EMPTY_TRACKING_LIST = "No links being tracked.";
 

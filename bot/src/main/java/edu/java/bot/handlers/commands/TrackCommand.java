@@ -6,7 +6,7 @@ import edu.java.bot.links.Link;
 import static edu.java.bot.links.Link.isLinkCorrect;
 
 public class TrackCommand extends Command {
-    private static final String NAME = "track";
+    public static final String NAME = "/track";
     private static final String DESCRIPTION = "Track a link. /track <link1> ...";
 
     public TrackCommand() {
