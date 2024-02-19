@@ -6,7 +6,7 @@ import edu.java.bot.links.Link;
 import static edu.java.bot.links.Link.isLinkCorrect;
 
 public class UntrackCommand extends Command {
-    public static final String NAME = "/untrack";
+    public static final String NAME = "untrack";
     private static final String DESCRIPTION = "Stop tracking a link. /untrack <link1> ...";
     private static final String ISNT_TRACKED = "The link wasn't tracked already.";
 
