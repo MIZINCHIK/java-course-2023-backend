@@ -1,0 +1,13 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/questions/75844487?site=stackoverflow.com"
+    },
+    "response": {
+        "status": 200,
+        "body": "{\n  \"items\": [\n    {\n      \"tags\": [\n        \"rpc\",\n        \"bitcoin\",\n        \"cryptocurrency\",\n        \"json-rpc\",\n        \"monero\"\n      ],\n      \"owner\": {\n        \"account_id\": 323705,\n        \"reputation\": 422,\n        \"user_id\": 643875,\n        \"user_type\": \"registered\",\n        \"accept_rate\": 70,\n        \"profile_image\": \"https://i.stack.imgur.com/KKKdK.png?s=256&g=1\",\n        \"display_name\": \"Alice\",\n        \"link\": \"https://stackoverflow.com/users/643875/alice\"\n      },\n      \"is_answered\": false,\n      \"view_count\": 117,\n      \"answer_count\": 0,\n      \"score\": 1,\n      \"last_activity_date\": 1680389607,\n      \"creation_date\": 1679777919,\n      \"question_id\": 75844487,\n      \"content_license\": \"CC BY-SA 4.0\",\n      \"link\": \"https://stackoverflow.com/questions/75844487/simulating-a-double-spend-transaction-on-monero-creating-an-intentionally-inval\",\n      \"title\": \"Simulating a double spend transaction on Monero (Creating an intentionally invalid tx)\"\n    }\n  ],\n  \"has_more\": false,\n  \"quota_max\": 10000,\n  \"quota_remaining\": 9936\n}",
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+}
