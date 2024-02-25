@@ -2,7 +2,7 @@ name: Bot Build
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     paths:
       - .github/workflows/bot.yml
       - bot/**
