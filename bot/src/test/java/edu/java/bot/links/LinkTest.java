@@ -12,6 +12,7 @@ public class LinkTest {
         assertThat(isLinkCorrect("wadhgjefhjewfew")).isFalse();
         assertThat(isLinkCorrect("123.com")).isFalse();
         assertThat(isLinkCorrect("www.123.com")).isFalse();
+        assertThat(isLinkCorrect("google.com")).isFalse();
     }
 
     @Test
