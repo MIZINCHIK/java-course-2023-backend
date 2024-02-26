@@ -42,8 +42,8 @@ public class HelpCommandTest {
     @Test
     @DisplayName("Various commands")
     void handle_whenSeveralCommands_thenAllInMessage() {
-        Command help = new HelpCommand();
-        help.handle(message, new String[] {"/help"}, bot);
+        Command help = new HelpCommand(bot);
+        help.handle(message, new String[] {"/help"});
         verify(bot).respondMd(any(), any(), stringCaptor.capture());
         String value = stringCaptor.getValue();
         assertThat(value.indexOf("cmd1")).isGreaterThan(-1);
