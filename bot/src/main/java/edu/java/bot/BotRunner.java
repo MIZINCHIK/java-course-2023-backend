@@ -8,8 +8,12 @@ import edu.java.bot.handlers.commands.HelpCommand;
 import edu.java.bot.handlers.commands.ListCommand;
 import edu.java.bot.handlers.commands.StartCommand;
 import edu.java.bot.handlers.commands.TrackCommand;
+import edu.java.bot.handlers.commands.UnknownCommand;
 import edu.java.bot.handlers.commands.UntrackCommand;
-import edu.java.bot.storage.DbStorage;
+import edu.java.bot.storage.DbLinkStorage;
+import edu.java.bot.storage.DbUserStorage;
+import edu.java.bot.storage.LinkStorage;
+import edu.java.bot.storage.UserStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -19,6 +23,8 @@ import org.springframework.stereotype.Component;
 public class BotRunner implements ApplicationRunner {
     private final String token;
     private PrimaveraBot bot;
+    private UserStorage userStorage;
+    private LinkStorage linkStorage;
     private UpdateHandler handler;
 
     @Autowired
@@ -28,19 +34,21 @@ public class BotRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        bot = new PrimaveraBot(token, new DbStorage());
+        bot = new PrimaveraBot(token);
+        userStorage = new DbUserStorage();
+        linkStorage = new DbLinkStorage();
         configureHandler();
         bot.setCommands(handler.getCommands());
         bot.setUpdatesListener(new BotUpdatesListener(handler), new BotExceptionHandler());
     }
 
     private void configureHandler() {
-        handler = new UpdateHandlerBuilder(bot)
-            .addCommand(new StartCommand())
-            .addCommand(new HelpCommand())
-            .addCommand(new TrackCommand())
-            .addCommand(new UntrackCommand())
-            .addCommand(new ListCommand())
+        handler = new UpdateHandlerBuilder(new UnknownCommand(bot))
+            .addCommand(new StartCommand(bot, userStorage))
+            .addCommand(new HelpCommand(bot))
+            .addCommand(new TrackCommand(bot, userStorage, linkStorage))
+            .addCommand(new UntrackCommand(bot, userStorage, linkStorage))
+            .addCommand(new ListCommand(bot, linkStorage, userStorage))
             .build();
     }
 }
