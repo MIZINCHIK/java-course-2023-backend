@@ -1,17 +1,16 @@
 package edu.java.bot.handlers;
 
-import edu.java.bot.PrimaveraBot;
 import edu.java.bot.handlers.commands.Command;
 import java.util.HashMap;
 import java.util.Map;
 
 public class UpdateHandlerBuilder {
     private final Map<String, Command> map;
-    private final PrimaveraBot bot;
+    private final Command unknownCommand;
 
-    public UpdateHandlerBuilder(PrimaveraBot bot) {
+    public UpdateHandlerBuilder(Command unknownCommand) {
         this.map = new HashMap<>();
-        this.bot = bot;
+        this.unknownCommand = unknownCommand;
     }
 
     public UpdateHandlerBuilder addCommand(Command command) {
@@ -20,6 +19,6 @@ public class UpdateHandlerBuilder {
     }
 
     public UpdateHandler build() {
-        return new UpdateHandler(map, bot);
+        return new UpdateHandler(map, unknownCommand);
     }
 }

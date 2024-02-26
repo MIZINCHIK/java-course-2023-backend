@@ -2,28 +2,31 @@ package edu.java.bot.handlers.commands;
 
 import com.pengrad.telegrambot.model.Message;
 import edu.java.bot.PrimaveraBot;
+import edu.java.bot.storage.UserStorage;
 
 public class StartCommand extends Command {
     public static final String NAME = "start";
     private static final String DESCRIPTION = "Register user. No arguments.";
     private static final String ALREADY_REGISTERED = "The user is already registered.";
+    private final UserStorage userStorage;
 
-    public StartCommand() {
-        super(NAME, DESCRIPTION);
+    public StartCommand(PrimaveraBot bot, UserStorage userStorage) {
+        super(NAME, DESCRIPTION, bot);
+        this.userStorage = userStorage;
     }
 
     @Override
-    public void handle(Message message, String[] args, PrimaveraBot bot) {
+    public void handle(Message message, String[] args) {
         Long userId = message.from().id();
-        if (bot.isUserRegistered(userId)) {
-            handleAlreadyRegistered(message, bot);
+        if (userStorage.isUserRegistered(userId)) {
+            handleAlreadyRegistered(message);
         } else {
-            bot.registerUser(userId);
-            handleSuccess(message, bot);
+            userStorage.registerUser(userId);
+            handleSuccess(message);
         }
     }
 
-    private void handleAlreadyRegistered(Message message, PrimaveraBot bot) {
+    private void handleAlreadyRegistered(Message message) {
         bot.respond(message.chat().id(), message.messageId(), ALREADY_REGISTERED);
     }
 }
