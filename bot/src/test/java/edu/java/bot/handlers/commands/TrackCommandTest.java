@@ -4,6 +4,8 @@ import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 import edu.java.bot.PrimaveraBot;
+import edu.java.bot.storage.LinkStorage;
+import edu.java.bot.storage.UserStorage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,10 @@ import static org.mockito.Mockito.verify;
 public class TrackCommandTest {
     @Mock
     private PrimaveraBot bot;
+    @Mock
+    private UserStorage userStorage;
+    @Mock
+    private LinkStorage linkStorage;
     @Mock
     private Message message;
     @Mock
@@ -42,8 +48,8 @@ public class TrackCommandTest {
     @Test
     @DisplayName("Insufficient arguments")
     void handle_whenNotEnoughArguments_thenFailure() {
-        Command track = new TrackCommand();
-        track.handle(message, new String[] {"/track"}, bot);
+        Command track = new TrackCommand(bot, userStorage, linkStorage);
+        track.handle(message, new String[] {"/track"});
         verify(bot).respond(any(), any(), stringCaptor.capture());
         String value = stringCaptor.getValue();
         assertThat(value).isEqualTo("The arguments provided are incorrect. Use /help to learn more");
@@ -52,9 +58,9 @@ public class TrackCommandTest {
     @Test
     @DisplayName("User not registered")
     void handle_whenUserNotRegistered_thenFailure() {
-        Mockito.when(bot.isUserRegistered(any())).thenReturn(false);
-        Command track = new TrackCommand();
-        track.handle(message, new String[] {"/track", "https://stackoverflow.com"}, bot);
+        Mockito.when(userStorage.isUserRegistered(any())).thenReturn(false);
+        Command track = new TrackCommand(bot, userStorage, linkStorage);
+        track.handle(message, new String[] {"/track", "https://stackoverflow.com"});
         verify(bot).respond(any(), any(), stringCaptor.capture());
         String value = stringCaptor.getValue();
         assertThat(value).isEqualTo("The user isn't registered. Use /start command.");
@@ -63,9 +69,9 @@ public class TrackCommandTest {
     @Test
     @DisplayName("Incorrect link")
     void handle_whenIncorrectLink_thenFailure() {
-        Mockito.when(bot.isUserRegistered(any())).thenReturn(true);
-        Command track = new TrackCommand();
-        track.handle(message, new String[] {"/track", "sdfsdfdsf"}, bot);
+        Mockito.when(userStorage.isUserRegistered(any())).thenReturn(true);
+        Command track = new TrackCommand(bot, userStorage, linkStorage);
+        track.handle(message, new String[] {"/track", "sdfsdfdsf"});
         verify(bot).respond(any(), any(), stringCaptor.capture());
         String value = stringCaptor.getValue();
         assertThat(value).isEqualTo("The following link is unsupported: sdfsdfdsf");
@@ -74,9 +80,9 @@ public class TrackCommandTest {
     @Test
     @DisplayName("Domain not supported")
     void handle_whenDomainNotSupported_thenFailure() {
-        Mockito.when(bot.isUserRegistered(any())).thenReturn(true);
-        Command track = new TrackCommand();
-        track.handle(message, new String[] {"/track", "https://google.com"}, bot);
+        Mockito.when(userStorage.isUserRegistered(any())).thenReturn(true);
+        Command track = new TrackCommand(bot, userStorage, linkStorage);
+        track.handle(message, new String[] {"/track", "https://google.com"});
         verify(bot).respond(any(), any(), stringCaptor.capture());
         String value = stringCaptor.getValue();
         assertThat(value).isEqualTo("The following link is unsupported: https://google.com");
@@ -85,9 +91,9 @@ public class TrackCommandTest {
     @Test
     @DisplayName("Domain not supported")
     void handle_whenStackoverflow_thenSuccess() {
-        Mockito.when(bot.isUserRegistered(any())).thenReturn(true);
-        Command track = new TrackCommand();
-        track.handle(message, new String[] {"/track", "https://stackoverflow.com"}, bot);
+        Mockito.when(userStorage.isUserRegistered(any())).thenReturn(true);
+        Command track = new TrackCommand(bot, userStorage, linkStorage);
+        track.handle(message, new String[] {"/track", "https://stackoverflow.com"});
         verify(bot).respond(any(), any(), stringCaptor.capture());
         String value = stringCaptor.getValue();
         assertThat(value).isEqualTo("Success");

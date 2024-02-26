@@ -4,6 +4,8 @@ import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 import edu.java.bot.PrimaveraBot;
+import edu.java.bot.storage.LinkStorage;
+import edu.java.bot.storage.UserStorage;
 import java.net.URI;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +25,10 @@ import static org.mockito.Mockito.verify;
 public class ListCommandTest {
     @Mock
     private PrimaveraBot bot;
+    @Mock
+    private UserStorage userStorage;
+    @Mock
+    private LinkStorage linkStorage;
     @Mock
     private Message message;
     @Mock
@@ -44,9 +50,9 @@ public class ListCommandTest {
     @Test
     @DisplayName("User not registered")
     void handle_whenUserNotRegistered_thenSpecialMessage() {
-        Mockito.when(bot.isUserRegistered(any())).thenReturn(false);
-        Command list = new ListCommand();
-        list.handle(message, new String[] {"/list"}, bot);
+        Mockito.when(userStorage.isUserRegistered(any())).thenReturn(false);
+        Command list = new ListCommand(bot, linkStorage, userStorage);
+        list.handle(message, new String[] {"/list"});
         verify(bot).respond(any(), any(), stringCaptor.capture());
         String value = stringCaptor.getValue();
         assertThat(value).isEqualTo("The user isn't registered. Use /start command.");
@@ -55,10 +61,10 @@ public class ListCommandTest {
     @Test
     @DisplayName("No saved links")
     void handle_whenNoSavedLinks_thenSpecialMessage() {
-        Mockito.when(bot.isUserRegistered(any())).thenReturn(true);
-        Mockito.when(bot.getLinksByUserId(any())).thenReturn(List.of());
-        Command list = new ListCommand();
-        list.handle(message, new String[] {"/list"}, bot);
+        Mockito.when(userStorage.isUserRegistered(any())).thenReturn(true);
+        Mockito.when(linkStorage.getLinksByUserId(any())).thenReturn(List.of());
+        Command list = new ListCommand(bot, linkStorage, userStorage);
+        list.handle(message, new String[] {"/list"});
         verify(bot).respond(any(), any(), stringCaptor.capture());
         String value = stringCaptor.getValue();
         assertThat(value).isEqualTo("No links being tracked.");
@@ -67,8 +73,8 @@ public class ListCommandTest {
     @Test
     @DisplayName("Several saved links")
     void handle_whenSeveralSavedLinks_thenCorrectTable() throws Exception {
-        Mockito.when(bot.isUserRegistered(any())).thenReturn(true);
-        Mockito.when(bot.getLinksByUserId(any())).thenReturn(List.of(
+        Mockito.when(userStorage.isUserRegistered(any())).thenReturn(true);
+        Mockito.when(linkStorage.getLinksByUserId(any())).thenReturn(List.of(
             new URI("http://123.com").toURL(),
             new URI("https://github.com").toURL(),
             new URI("https://stackoverflow.com").toURL(),
@@ -76,8 +82,8 @@ public class ListCommandTest {
             new URI("https://stackoverflow.com/21312/12321").toURL(),
             new URI("https://ya.ru").toURL()
         ));
-        Command list = new ListCommand();
-        list.handle(message, new String[] {"/list"}, bot);
+        Command list = new ListCommand(bot, linkStorage, userStorage);
+        list.handle(message, new String[] {"/list"});
         verify(bot).respondMd(any(), any(), stringCaptor.capture());
         String value = stringCaptor.getValue();
         assertThat(value.indexOf("GITHUB")).isGreaterThan(-1);

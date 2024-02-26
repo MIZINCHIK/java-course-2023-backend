@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 import edu.java.bot.PrimaveraBot;
+import edu.java.bot.storage.UserStorage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,8 @@ import static org.mockito.Mockito.verify;
 public class StartCommandTest {
     @Mock
     private PrimaveraBot bot;
+    @Mock
+    private UserStorage userStorage;
     @Mock
     private Message message;
     @Mock
@@ -42,9 +45,9 @@ public class StartCommandTest {
     @Test
     @DisplayName("User not registered")
     void handle_whenUserNotRegistered_thenSuccess() {
-        Mockito.when(bot.isUserRegistered(any())).thenReturn(false);
-        Command start = new StartCommand();
-        start.handle(message, new String[] {"/start"}, bot);
+        Mockito.when(userStorage.isUserRegistered(any())).thenReturn(false);
+        Command start = new StartCommand(bot, userStorage);
+        start.handle(message, new String[] {"/start"});
         verify(bot).respond(any(), any(), stringCaptor.capture());
         String value = stringCaptor.getValue();
         assertThat(value).isEqualTo("Success");
@@ -53,9 +56,9 @@ public class StartCommandTest {
     @Test
     @DisplayName("User registered")
     void handle_whenRegistered_thenFailure() {
-        Mockito.when(bot.isUserRegistered(any())).thenReturn(true);
-        Command start = new StartCommand();
-        start.handle(message, new String[] {"/start"}, bot);
+        Mockito.when(userStorage.isUserRegistered(any())).thenReturn(true);
+        Command start = new StartCommand(bot, userStorage);
+        start.handle(message, new String[] {"/start"});
         verify(bot).respond(any(), any(), stringCaptor.capture());
         String value = stringCaptor.getValue();
         assertThat(value).isEqualTo("The user is already registered.");
