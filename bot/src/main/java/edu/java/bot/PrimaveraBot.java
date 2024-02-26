@@ -9,19 +9,13 @@ import com.pengrad.telegrambot.request.GetMyCommands;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
 import edu.java.bot.handlers.commands.Command;
-import edu.java.bot.links.Link;
-import edu.java.bot.storage.Storage;
-import java.net.URL;
-import java.util.List;
 import java.util.Map;
 
-public class PrimaveraBot implements Storage {
+public class PrimaveraBot {
     private final TelegramBot bot;
-    private final Storage storage;
 
-    public PrimaveraBot(String token, Storage storage) {
+    public PrimaveraBot(String token) {
         bot = new TelegramBot(token);
-        this.storage = storage;
     }
 
     public void setCommands(Map<String, Command> commands) {
@@ -46,35 +40,5 @@ public class PrimaveraBot implements Storage {
     public void respondMd(Long chatId, Integer messageId, String response) {
         bot.execute(new SendMessage(chatId, response).parseMode(ParseMode.MarkdownV2)
             .replyToMessageId(messageId));
-    }
-
-    @Override
-    public List<URL> getLinksByUserId(Long userId) {
-        return storage.getLinksByUserId(userId);
-    }
-
-    @Override
-    public void trackLink(Link link, Long userId) {
-        storage.trackLink(link, userId);
-    }
-
-    @Override
-    public void untrackLink(Link link, Long userId) {
-        storage.untrackLink(link, userId);
-    }
-
-    @Override
-    public void registerUser(Long userId) {
-        storage.registerUser(userId);
-    }
-
-    @Override
-    public boolean isUserRegistered(Long userId) {
-        return storage.isUserRegistered(userId);
-    }
-
-    @Override
-    public boolean isLinkTracked(Link link) {
-        return storage.isLinkTracked(link);
     }
 }
