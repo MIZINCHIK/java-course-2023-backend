@@ -25,9 +25,7 @@ public class GitHubClientTest {
         wireMock.loadMappingsFrom(MAPPINGS);
         client = new ClientsConfiguration().gitHubClient(
             WebClient.builder(),
-            new ApplicationConfig(null,
-                new ApplicationConfig.Github(wmRuntimeInfo.getHttpBaseUrl()), null
-            )
+            wmRuntimeInfo.getHttpBaseUrl()
         );
     }
 

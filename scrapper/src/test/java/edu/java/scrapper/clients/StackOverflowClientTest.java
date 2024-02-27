@@ -25,9 +25,7 @@ public class StackOverflowClientTest {
         wireMock.loadMappingsFrom(MAPPINGS);
         client = new ClientsConfiguration().stackOverflowClient(
             WebClient.builder(),
-            new ApplicationConfig(null,
-                null, new ApplicationConfig.StackOverflow(wmRuntimeInfo.getHttpBaseUrl())
-            )
+            wmRuntimeInfo.getHttpBaseUrl()
         );
     }
 
