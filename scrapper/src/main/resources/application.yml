@@ -4,11 +4,11 @@ app:
     interval: 10s
     force-check-delay: 10s
 
-github:
-  base-url: https://api.github.com/
-
-stack-overflow:
-  base-url: https://api.stackexchange.com/
+clients:
+  github:
+    base-url: https://api.github.com/
+  stack-overflow:
+    base-url: https://api.stackexchange.com/
 
 spring:
   application:

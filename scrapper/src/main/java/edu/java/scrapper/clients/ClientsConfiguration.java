@@ -16,7 +16,7 @@ public class ClientsConfiguration {
 
     @Bean
     public GitHubClient gitHubClient(
-        WebClient.Builder builder, @Value("${github.base-url:https://api.github.com/}") String baseUrl
+        WebClient.Builder builder, @Value("${clients.github.base-url:https://api.github.com/}") String baseUrl
     ) {
         builder.defaultStatusHandler(HttpStatusCode::isError, resp -> {
             throw new HttpClientErrorException(resp.statusCode(), GITHUB_ERROR);
@@ -27,7 +27,7 @@ public class ClientsConfiguration {
     @Bean
     public StackOverflowClient stackOverflowClient(
         WebClient.Builder builder,
-        @Value("${stack-overflow.base-url:https://api.stackexchange.com/}") String baseUrl
+        @Value("${clients.stack-overflow.base-url:https://api.stackexchange.com/}") String baseUrl
     ) {
         builder.defaultStatusHandler(HttpStatusCode::isError, resp -> {
             throw new HttpClientErrorException(resp.statusCode(), STACK_OVERFLOW_ERROR);
