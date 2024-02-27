@@ -1,6 +1,5 @@
 package edu.java.scrapper.clients;
 
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,14 +10,13 @@ import org.springframework.web.reactive.function.client.support.WebClientAdapter
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
-@AllArgsConstructor
 public class ClientsConfiguration {
     private static final String GITHUB_ERROR = "Github client encountered and error";
     private static final String STACK_OVERFLOW_ERROR = "StackOverflow client encountered and error";
 
     @Bean
     public GitHubClient gitHubClient(
-        WebClient.Builder builder, @Value("${app.github.base-url:https://api.github.com/}") String baseUrl
+        WebClient.Builder builder, @Value("${github.base-url:https://api.github.com/}") String baseUrl
     ) {
         builder.defaultStatusHandler(HttpStatusCode::isError, resp -> {
             throw new HttpClientErrorException(resp.statusCode(), GITHUB_ERROR);
@@ -29,7 +27,7 @@ public class ClientsConfiguration {
     @Bean
     public StackOverflowClient stackOverflowClient(
         WebClient.Builder builder,
-        @Value("${app.stack-overflow.base-url:https://api.stackexchange.com/}") String baseUrl
+        @Value("${stack-overflow.base-url:https://api.stackexchange.com/}") String baseUrl
     ) {
         builder.defaultStatusHandler(HttpStatusCode::isError, resp -> {
             throw new HttpClientErrorException(resp.statusCode(), STACK_OVERFLOW_ERROR);
