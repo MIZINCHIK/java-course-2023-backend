@@ -9,8 +9,16 @@ spring:
   config:
     import: optional:file:.env[.properties]
 
+clients:
+  scrapper:
+    base-url: http://localhost:8080/
+
 server:
   port: 8090
 
 logging:
   config: classpath:log4j2-plain.xml
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
