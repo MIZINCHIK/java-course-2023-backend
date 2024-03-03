@@ -1,4 +1,4 @@
-package edu.java.bot.links;
+package edu.java.model.links;
 
 import java.net.URL;
 

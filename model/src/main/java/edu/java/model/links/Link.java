@@ -1,11 +1,11 @@
-package edu.java.bot.links;
+package edu.java.model.links;
 
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import static edu.java.bot.links.LinkDomain.UNSUPPORTED;
-import static edu.java.bot.links.LinkDomain.inferDomain;
+import static edu.java.model.links.LinkDomain.UNSUPPORTED;
+import static edu.java.model.links.LinkDomain.inferDomain;
 
 public class Link {
     private final URL url;
