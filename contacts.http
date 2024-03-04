@@ -1,0 +1,11 @@
+###
+GET http://localhost:8080/links
+Content-Type: application/json
+#Tg-Chat-Id: 0
+
+###
+GET http://localhost:8080/contacts/2
+
+###
+GET http://localhost:8080/contacts/search/findByName?name=test
+

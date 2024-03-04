@@ -31,6 +31,10 @@ public class TgChatController {
     @Operation(summary = "Проверить, отслеживается ли чат",
                responses = {
                    @ApiResponse(responseCode = "200", description = "Чат успешно получен"),
+                   @ApiResponse(responseCode = "400", description = "Некорректные параметры запроса", content = {
+                       @Content(mediaType = "application/json",
+                                schema = @Schema(implementation = ApiErrorResponse.class))
+                   }),
                    @ApiResponse(responseCode = "404", description = "Чат не отслеживается")})
     private ResponseEntity<Void> getChat(
         @Parameter(name = "id",
