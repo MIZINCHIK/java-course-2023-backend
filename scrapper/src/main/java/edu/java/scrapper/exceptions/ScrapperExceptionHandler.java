@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
+import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -51,7 +53,7 @@ public class ScrapperExceptionHandler extends ResponseEntityExceptionHandler {
         ), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(MalformedUrlException.class)
+    @ExceptionHandler({MalformedUrlException.class, MissingRequestHeaderException.class})
     private ResponseEntity<ApiErrorResponse> handleMalformedUrlException(Exception ex) {
         return new ResponseEntity<>(new ApiErrorResponse(
             ex.getMessage(), HttpStatus.BAD_REQUEST.toString(), ex.getClass().getName(), ex.getLocalizedMessage(),

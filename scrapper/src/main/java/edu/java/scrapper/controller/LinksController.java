@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +55,6 @@ public class LinksController {
                                 schema = @Schema(implementation = ApiErrorResponse.class))
                    })})
     private ResponseEntity<ListLinksResponse> getLinks(
-        @NotNull
         @Parameter(name = "Tg-Chat-Id", required = true, in = ParameterIn.HEADER)
         @RequestHeader(value = "Tg-Chat-Id")
         Long tgChatId
