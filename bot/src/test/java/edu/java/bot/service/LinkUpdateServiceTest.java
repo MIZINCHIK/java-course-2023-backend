@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,6 +32,7 @@ public class LinkUpdateServiceTest {
             new LinkUpdate(1L, new URI("https://google.com"), "sda", List.of())))
             .isInstanceOf(MalformedUrlException.class)
             .hasMessage("URL provided isn't supported");
+        verifyNoInteractions(primaveraBot);
     }
 
     @Test
