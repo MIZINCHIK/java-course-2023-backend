@@ -1,0 +1,13 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/repos/owner1/repo1"
+    },
+    "response": {
+        "status": 200,
+        "body": "{\"updated_at\":\"2011-01-26T19:14:43Z\"}",
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+}
