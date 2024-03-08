@@ -31,6 +31,7 @@ public interface LinksApi {
                    })})
     ResponseEntity<ListLinksResponse> getLinks(
         @NotNull
+        @RequestHeader(value = "Tg-Chat-Id")
         Long tgChatId
     );
 
