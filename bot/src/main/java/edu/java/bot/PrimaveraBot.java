@@ -41,4 +41,8 @@ public class PrimaveraBot {
         bot.execute(new SendMessage(chatId, response).parseMode(ParseMode.MarkdownV2)
             .replyToMessageId(messageId));
     }
+
+    public void message(Long chatId, String message) {
+        bot.execute(new SendMessage(chatId, message));
+    }
 }

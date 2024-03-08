@@ -1,0 +1,22 @@
+{
+    "request": {
+        "method": "POST",
+        "url": "/updates",
+        "bodyPatterns": [{
+            "equalToJson":{
+                "id": 0,
+                "url": "htt://github.com/",
+                "description": "string",
+                "tgChatIds": [
+                ]
+            }
+        }]
+    },
+    "response": {
+        "status": 400,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": "{}"
+    }
+}

@@ -2,7 +2,7 @@ package edu.java.bot.handlers.commands;
 
 import com.pengrad.telegrambot.model.Message;
 import edu.java.bot.PrimaveraBot;
-import edu.java.bot.storage.UserStorage;
+import edu.java.model.storage.UserStorage;
 
 public class StartCommand extends Command {
     public static final String NAME = "start";

@@ -2,10 +2,10 @@ package edu.java.bot.handlers.commands;
 
 import com.pengrad.telegrambot.model.Message;
 import edu.java.bot.PrimaveraBot;
-import edu.java.bot.links.Link;
-import edu.java.bot.storage.LinkStorage;
-import edu.java.bot.storage.UserStorage;
-import static edu.java.bot.links.Link.isLinkCorrect;
+import edu.java.model.links.Link;
+import edu.java.model.storage.LinkStorage;
+import edu.java.model.storage.UserStorage;
+import static edu.java.model.links.Link.isLinkCorrect;
 
 public class TrackCommand extends Command {
     public static final String NAME = "track";

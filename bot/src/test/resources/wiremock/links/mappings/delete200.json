@@ -1,0 +1,23 @@
+{
+    "request": {
+        "method": "DELETE",
+        "url": "/links",
+        "headers": {
+            "Tg-Chat-Id": {
+                "equalToJson": "0"
+            }
+        },
+        "bodyPatterns": [{
+            "equalToJson":{
+                "link": "https://github.com/"
+            }
+        }]
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": "{\n  \"id\": 0,\n  \"url\": \"https://github.com/\"\n}"
+    }
+}

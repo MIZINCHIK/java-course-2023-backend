@@ -1,0 +1,22 @@
+{
+    "request": {
+        "method": "POST",
+        "url": "/links",
+        "headers": {
+            "Tg-Chat-Id": {
+                "equalToJson": "1"
+            }
+        },
+        "bodyPatterns": [{
+            "equalToJson":{
+                "link": "https://github.com/"
+            }
+        }]
+    },
+    "response": {
+        "status": 400,
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+}

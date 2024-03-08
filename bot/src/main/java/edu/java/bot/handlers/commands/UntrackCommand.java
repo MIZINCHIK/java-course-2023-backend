@@ -2,10 +2,10 @@ package edu.java.bot.handlers.commands;
 
 import com.pengrad.telegrambot.model.Message;
 import edu.java.bot.PrimaveraBot;
-import edu.java.bot.links.Link;
-import edu.java.bot.storage.LinkStorage;
-import edu.java.bot.storage.UserStorage;
-import static edu.java.bot.links.Link.isLinkCorrect;
+import edu.java.model.links.Link;
+import edu.java.model.storage.LinkStorage;
+import edu.java.model.storage.UserStorage;
+import static edu.java.model.links.Link.isLinkCorrect;
 
 public class UntrackCommand extends Command {
     public static final String NAME = "untrack";
@@ -32,7 +32,7 @@ public class UntrackCommand extends Command {
             for (int i = 1; i < argsLength; i++) {
                 if (isLinkCorrect(args[i])) {
                     Link link = new Link(args[i]);
-                    if (linkStorage.isLinkTracked(link)) {
+                    if (linkStorage.isLinkTracked(link, userId)) {
                         linkStorage.untrackLink(link, userId);
                         handleSuccess(message);
                     } else {

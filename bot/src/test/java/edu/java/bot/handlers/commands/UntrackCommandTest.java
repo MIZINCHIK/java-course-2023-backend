@@ -4,8 +4,8 @@ import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 import edu.java.bot.PrimaveraBot;
-import edu.java.bot.storage.LinkStorage;
-import edu.java.bot.storage.UserStorage;
+import edu.java.model.storage.LinkStorage;
+import edu.java.model.storage.UserStorage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -70,7 +70,7 @@ public class UntrackCommandTest {
     @DisplayName("Link not tracked")
     void handle_whenLinkIsntTracked_thenFailure() {
         Mockito.when(userStorage.isUserRegistered(any())).thenReturn(true);
-        Mockito.when(linkStorage.isLinkTracked(any())).thenReturn(false);
+        Mockito.when(linkStorage.isLinkTracked(any(), any())).thenReturn(false);
         Command untrack = new UntrackCommand(bot, userStorage, linkStorage);
         untrack.handle(message, new String[] {"/untrack", "https://stackoverflow.com"});
         verify(bot).respond(any(), any(), stringCaptor.capture());
@@ -82,7 +82,7 @@ public class UntrackCommandTest {
     @DisplayName("Link is tracked")
     void handle_whenLinkIsTracked_thenSuccess() {
         Mockito.when(userStorage.isUserRegistered(any())).thenReturn(true);
-        Mockito.when(linkStorage.isLinkTracked(any())).thenReturn(true);
+        Mockito.when(linkStorage.isLinkTracked(any(), any())).thenReturn(true);
         Command untrack = new UntrackCommand(bot, userStorage, linkStorage);
         untrack.handle(message, new String[] {"/untrack", "https://stackoverflow.com"});
         verify(bot).respond(any(), any(), stringCaptor.capture());

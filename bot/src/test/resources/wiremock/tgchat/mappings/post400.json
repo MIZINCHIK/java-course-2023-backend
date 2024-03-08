@@ -1,0 +1,12 @@
+{
+    "request": {
+        "method": "POST",
+        "url": "/tg-chat/1"
+    },
+    "response": {
+        "status": 400,
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+}

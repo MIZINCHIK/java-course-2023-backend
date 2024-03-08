@@ -1,8 +1,8 @@
-package edu.java.bot.links;
+package edu.java.model.links;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static edu.java.bot.links.Link.isLinkCorrect;
+import static edu.java.model.links.Link.isLinkCorrect;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class LinkTest {

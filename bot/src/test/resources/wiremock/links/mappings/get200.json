@@ -1,0 +1,18 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/links",
+        "headers": {
+            "Tg-Chat-Id": {
+                "equalToJson": "0"
+            }
+        }
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": "{\n  \"links\": [],\n  \"size\": 0\n}"
+    }
+}

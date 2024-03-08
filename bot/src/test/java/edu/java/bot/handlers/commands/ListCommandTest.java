@@ -4,8 +4,9 @@ import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.User;
 import edu.java.bot.PrimaveraBot;
-import edu.java.bot.storage.LinkStorage;
-import edu.java.bot.storage.UserStorage;
+import edu.java.model.dto.LinkResponse;
+import edu.java.model.storage.LinkStorage;
+import edu.java.model.storage.UserStorage;
 import java.net.URI;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -75,12 +76,12 @@ public class ListCommandTest {
     void handle_whenSeveralSavedLinks_thenCorrectTable() throws Exception {
         Mockito.when(userStorage.isUserRegistered(any())).thenReturn(true);
         Mockito.when(linkStorage.getLinksByUserId(any())).thenReturn(List.of(
-            new URI("http://123.com").toURL(),
-            new URI("https://github.com").toURL(),
-            new URI("https://stackoverflow.com").toURL(),
-            new URI("https://github.com/232132131").toURL(),
-            new URI("https://stackoverflow.com/21312/12321").toURL(),
-            new URI("https://ya.ru").toURL()
+            new LinkResponse(null, new URI("http://123.com")),
+            new LinkResponse(null, new URI("https://github.com")),
+            new LinkResponse(null, new URI("https://stackoverflow.com")),
+            new LinkResponse(null, new URI("https://github.com/232132131")),
+            new LinkResponse(null, new URI("https://stackoverflow.com/21312/12321")),
+            new LinkResponse(null, new URI("https://ya.ru"))
         ));
         Command list = new ListCommand(bot, linkStorage, userStorage);
         list.handle(message, new String[] {"/list"});

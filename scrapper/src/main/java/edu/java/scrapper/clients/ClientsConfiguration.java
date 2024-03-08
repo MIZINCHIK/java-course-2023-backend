@@ -13,6 +13,7 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 public class ClientsConfiguration {
     private static final String GITHUB_ERROR = "Github client encountered and error";
     private static final String STACK_OVERFLOW_ERROR = "StackOverflow client encountered and error";
+    private static final String BOT_ERROR = "Bot client encountered and error";
 
     @Bean
     public GitHubClient gitHubClient(
@@ -33,7 +34,17 @@ public class ClientsConfiguration {
             throw new HttpClientErrorException(resp.statusCode(), STACK_OVERFLOW_ERROR);
         });
         return buildFactory(baseUrl, builder).createClient(StackOverflowClient.class);
+    }
 
+    @Bean
+    public BotClient botClient(
+        WebClient.Builder builder,
+        @Value("${clients.bot.base-url:http://localhost:8090/}") String baseUrl
+    ) {
+        builder.defaultStatusHandler(HttpStatusCode::isError, resp -> {
+            throw new HttpClientErrorException(resp.statusCode(), BOT_ERROR);
+        });
+        return buildFactory(baseUrl, builder).createClient(BotClient.class);
     }
 
     private HttpServiceProxyFactory buildFactory(String baseUrl, WebClient.Builder builder) {
