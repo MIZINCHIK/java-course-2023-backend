@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.java.model.dto.AddLinkRequest;
 import edu.java.model.dto.LinkResponse;
 import edu.java.model.dto.RemoveLinkRequest;
-import edu.java.model.links.Link;
 import edu.java.model.storage.LinkStorage;
 import edu.java.model.storage.UserStorage;
 import java.net.URI;
@@ -68,7 +67,8 @@ public class LinksControllerTest {
         mvc.perform(get("/links")
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.description").value("Required request header 'Tg-Chat-Id' for method parameter type Long is not present"))
+            .andExpect(jsonPath("$.description").value(
+                "Required request header 'Tg-Chat-Id' for method parameter type Long is not present"))
             .andExpect(jsonPath("$.code").value("400 BAD_REQUEST"))
             .andExpect(jsonPath("$.exceptionName").value("org.springframework.web.bind.MissingRequestHeaderException"));
         verifyNoInteractions(userStorage);
@@ -82,9 +82,11 @@ public class LinksControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Tg-Chat-Id", objectMapper.writeValueAsString(null)))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.description").value("Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; For input string: \"null\""))
+            .andExpect(jsonPath("$.description").value(
+                "Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; For input string: \"null\""))
             .andExpect(jsonPath("$.code").value("400 BAD_REQUEST"))
-            .andExpect(jsonPath("$.exceptionName").value("org.springframework.web.method.annotation.MethodArgumentTypeMismatchException"));
+            .andExpect(jsonPath("$.exceptionName").value(
+                "org.springframework.web.method.annotation.MethodArgumentTypeMismatchException"));
         verifyNoInteractions(userStorage);
         verifyNoInteractions(linkStorage);
     }
@@ -117,7 +119,8 @@ public class LinksControllerTest {
         mvc.perform(post("/links")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(addLinkRequest)))
-            .andExpect(jsonPath("$.description").value("Required request header 'Tg-Chat-Id' for method parameter type Long is not present"))
+            .andExpect(jsonPath("$.description").value(
+                "Required request header 'Tg-Chat-Id' for method parameter type Long is not present"))
             .andExpect(jsonPath("$.code").value("400 BAD_REQUEST"))
             .andExpect(jsonPath("$.exceptionName").value("org.springframework.web.bind.MissingRequestHeaderException"));
         verifyNoInteractions(userStorage);
@@ -188,7 +191,8 @@ public class LinksControllerTest {
         mvc.perform(delete("/links")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(removeLinkRequest)))
-            .andExpect(jsonPath("$.description").value("Required request header 'Tg-Chat-Id' for method parameter type Long is not present"))
+            .andExpect(jsonPath("$.description").value(
+                "Required request header 'Tg-Chat-Id' for method parameter type Long is not present"))
             .andExpect(jsonPath("$.code").value("400 BAD_REQUEST"))
             .andExpect(jsonPath("$.exceptionName").value("org.springframework.web.bind.MissingRequestHeaderException"));
         verifyNoInteractions(userStorage);

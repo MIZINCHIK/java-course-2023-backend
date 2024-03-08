@@ -30,7 +30,7 @@ public interface LinksApi {
                                 schema = @Schema(implementation = ApiErrorResponse.class))
                    })})
     ResponseEntity<ListLinksResponse> getLinks(
-        @RequestHeader(value = "Tg-Chat-Id")
+        @NotNull
         Long tgChatId
     );
 
