@@ -1,15 +1,8 @@
 package edu.java.scrapper.controller;
 
-import edu.java.model.dto.ApiErrorResponse;
 import edu.java.model.storage.UserStorage;
 import edu.java.scrapper.exceptions.UserAlreadyRegisteredException;
 import edu.java.scrapper.exceptions.UserNotRegisteredException;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,25 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/tg-chat")
-public class TgChatController {
+public class TgChatController implements TgChatApi {
     private final UserStorage userStorage;
 
-    @GetMapping(value = "/{id}",
-                produces = {"application/json"})
-    @Operation(summary = "Проверить, отслеживается ли чат",
-               responses = {
-                   @ApiResponse(responseCode = "200", description = "Чат успешно получен"),
-                   @ApiResponse(responseCode = "400", description = "Некорректные параметры запроса", content = {
-                       @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = ApiErrorResponse.class))
-                   }),
-                   @ApiResponse(responseCode = "404", description = "Чат не отслеживается")})
-    private ResponseEntity<Void> getChat(
-        @Parameter(name = "id",
-                   required = true,
-                   in = ParameterIn.PATH)
+    @GetMapping(value = "/{id}")
+    @Override
+    public ResponseEntity<Void> getChat(
         @PathVariable("id")
-        @NotNull
         Long id
     ) {
         if (userStorage.isUserRegistered(id)) {
@@ -50,25 +31,10 @@ public class TgChatController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping(value = "/{id}",
-                 produces = {"application/json"})
-    @Operation(summary = "Зарегистрировать чат",
-               responses = {
-                   @ApiResponse(responseCode = "200", description = "Чат зарегистрирован"),
-                   @ApiResponse(responseCode = "400", description = "Некорректные параметры запроса", content = {
-                       @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = ApiErrorResponse.class))
-                   }),
-                   @ApiResponse(responseCode = "409", description = "Чат уже зарегистрирован", content = {
-                       @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = ApiErrorResponse.class))
-                   })})
-    private ResponseEntity<Void> registerChat(
-        @Parameter(name = "id",
-                   required = true,
-                   in = ParameterIn.PATH)
+    @PostMapping(value = "/{id}")
+    @Override
+    public ResponseEntity<Void> registerChat(
         @PathVariable("id")
-        @NotNull
         Long id
     ) {
         if (userStorage.isUserRegistered(id)) {
@@ -78,26 +44,10 @@ public class TgChatController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(value = "/{id}",
-                   produces = {"application/json"})
-    @Operation(summary = "Удалить чат",
-               responses = {
-                   @ApiResponse(responseCode = "200", description = "Чат успешно удалён"),
-                   @ApiResponse(responseCode = "400", description = "Некорректные параметры запроса", content = {
-                       @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = ApiErrorResponse.class))
-                   }),
-                   @ApiResponse(responseCode = "404", description = "Чат не существует", content = {
-                       @Content(mediaType = "application/json",
-                                schema = @Schema(implementation = ApiErrorResponse.class))
-                   })
-               })
-    private ResponseEntity<Void> deleteChat(
-        @Parameter(name = "id",
-                   required = true,
-                   in = ParameterIn.PATH)
+    @DeleteMapping(value = "/{id}")
+    @Override
+    public ResponseEntity<Void> deleteChat(
         @PathVariable("id")
-        @NotNull
         Long id
     ) {
         if (!userStorage.isUserRegistered(id)) {

@@ -1,6 +1,7 @@
 package edu.java.scrapper.controller;
 
 import edu.java.model.storage.UserStorage;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -11,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -28,6 +28,7 @@ public class TgChatControllerTest {
     private UserStorage userStorage;
 
     @Test
+    @DisplayName("GET 404")
     public void getChat_whenIsntRegistered_then404() throws Exception {
         Mockito.when(userStorage.isUserRegistered(0L)).thenReturn(false);
         mvc.perform(get("/tg-chat/0")
@@ -38,6 +39,7 @@ public class TgChatControllerTest {
     }
 
     @Test
+    @DisplayName("GET 200")
     public void getChat_whenRegistered_then200() throws Exception {
         Mockito.when(userStorage.isUserRegistered(0L)).thenReturn(true);
         mvc.perform(get("/tg-chat/0")
@@ -48,6 +50,7 @@ public class TgChatControllerTest {
     }
 
     @Test
+    @DisplayName("POST 200")
     public void registerChat_whenIsntRegistered_then200() throws Exception {
         Mockito.when(userStorage.isUserRegistered(0L)).thenReturn(false);
         mvc.perform(post("/tg-chat/0")
@@ -59,6 +62,7 @@ public class TgChatControllerTest {
     }
 
     @Test
+    @DisplayName("POST 409")
     public void registerChat_whenRegistered_then409() throws Exception {
         Mockito.when(userStorage.isUserRegistered(0L)).thenReturn(true);
         mvc.perform(post("/tg-chat/0")
@@ -72,6 +76,7 @@ public class TgChatControllerTest {
     }
 
     @Test
+    @DisplayName("DELETE 404")
     public void deleteChat_whenIsntRegistered_then404() throws Exception {
         Mockito.when(userStorage.isUserRegistered(0L)).thenReturn(false);
         mvc.perform(delete("/tg-chat/0")
@@ -85,6 +90,7 @@ public class TgChatControllerTest {
     }
 
     @Test
+    @DisplayName("DELETE 200")
     public void deleteChat_whenRegistered_then200() throws Exception {
         Mockito.when(userStorage.isUserRegistered(0L)).thenReturn(true);
         mvc.perform(delete("/tg-chat/0")
