@@ -6,6 +6,7 @@ import edu.java.model.dto.LinkUpdate;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -35,6 +36,7 @@ public class LinkUpdateControllerTest {
     private LinkUpdateService service;
 
     @Test
+    @DisplayName("POST 200")
     public void sendUpdate_whenCorrectUpdate_then200() throws Exception {
         LinkUpdate update =
             new LinkUpdate(0L, new URI("https://www.github.com"), "sdad", List.of());
@@ -47,6 +49,7 @@ public class LinkUpdateControllerTest {
 
     @ParameterizedTest
     @MethodSource("generateIncorrectUpdates")
+    @DisplayName("POST 400")
     public void sendUpdate_whenIncorrectUpdate_then400(Long id, String description, List<Long> tgChatIds)
         throws Exception {
         LinkUpdate update =

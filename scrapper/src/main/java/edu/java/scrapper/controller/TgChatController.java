@@ -3,7 +3,6 @@ package edu.java.scrapper.controller;
 import edu.java.model.storage.UserStorage;
 import edu.java.scrapper.exceptions.UserAlreadyRegisteredException;
 import edu.java.scrapper.exceptions.UserNotRegisteredException;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
