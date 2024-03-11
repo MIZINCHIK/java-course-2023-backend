@@ -26,5 +26,5 @@ create table if not exists following_links
 
     foreign key (user_id) references users (id),
     foreign key (link_id) references links (id),
-    unique (user_id, link_id)
+    primary key (user_id, link_id)
 );
