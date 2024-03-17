@@ -5,11 +5,11 @@ import edu.java.model.links.Link;
 import java.util.List;
 
 public interface LinkStorage {
-    List<LinkResponse> getLinksByUserId(Long userId);
+    List<LinkResponse> getLinksByUserId(long userId);
 
-    Long trackLink(Link link, Long userId);
+    long trackLink(Link link, long userId);
 
-    Long untrackLink(Link link, Long userId);
+    long untrackLink(Link link, long userId);
 
-    boolean isLinkTracked(Link link, Long userId);
+    boolean isLinkTracked(Link link, long userId);
 }
