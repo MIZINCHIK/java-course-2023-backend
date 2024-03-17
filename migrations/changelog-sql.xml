@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.21.xsd">
+    <changeSet id="clear_state" author="MIZINCHIK">
+        <tagDatabase tag="clear_state"/>
+    </changeSet>
+    <changeSet id="init" author="MIZINCHIK">
+        <sqlFile path="sql/init.sql" relativeToChangelogFile="true"/>
+        <sql>COMMENT ON TABLE users is 'Users'' (or chats'', it''s the same) telegram ids';</sql>
+        <sql>COMMENT ON TABLE links is 'The links that are being scrapped';</sql>
+        <sql>COMMENT ON TABLE following_links is 'Provides many-to-many relation between links and users';</sql>
+    </changeSet>
+</databaseChangeLog>
