@@ -11,6 +11,7 @@ import edu.java.scrapper.exceptions.UserNotRegisteredException;
 import edu.java.scrapper.service.ModifiableLinkStorage;
 import java.net.URI;
 import java.time.Duration;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -91,9 +92,9 @@ public class JdbcLinkService implements ModifiableLinkStorage {
     }
 
     @Override
-    public void updateLink(long linkId) {
+    public void updateLink(long linkId, OffsetDateTime time) {
         try {
-            linksDao.update(linkId);
+            linksDao.update(linkId, time);
         } catch (EmptyResultDataAccessException e) {
             throw new LinkNotTrackedException(e);
         }

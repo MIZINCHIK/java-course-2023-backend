@@ -95,9 +95,10 @@ public class JdbcLinksDao {
             .single());
     }
 
-    public LinkDto update(long linkId) {
-        String sql = "update links set last_update = now() where id = (:link_id) returning *";
+    public LinkDto update(long linkId, OffsetDateTime time) {
+        String sql = "update links set last_update = (:time) where id = (:link_id) returning *";
         return jdbcClient.sql(sql)
+            .param("time", time, Types.TIMESTAMP_WITH_TIMEZONE)
             .param("link_id", linkId, Types.BIGINT)
             .query((rs, rowNum) -> new LinkDto(
                 rs.getLong("id"),

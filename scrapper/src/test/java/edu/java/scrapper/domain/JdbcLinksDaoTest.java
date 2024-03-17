@@ -295,7 +295,7 @@ public class JdbcLinksDaoTest extends IntegrationTest {
     @Rollback
     @DisplayName("Update ids not found")
     void update_whenIdDoesNotExist_thenException() {
-        assertThatThrownBy(() -> linksRepository.update(0L)).isInstanceOf(EmptyResultDataAccessException.class);
+        assertThatThrownBy(() -> linksRepository.update(0L, OffsetDateTime.now())).isInstanceOf(EmptyResultDataAccessException.class);
     }
 
     @Test
@@ -305,7 +305,7 @@ public class JdbcLinksDaoTest extends IntegrationTest {
     void update_whenCorrectIds_thenUpdated() {
         long id = linksRepository.add(new Link("https://stackoverflow.com/"));
         OffsetDateTime timeBefore = OffsetDateTime.now(ZoneOffset.UTC).minusDays(1L);
-        var updatedTime = linksRepository.update(id).lastUpdate();
+        var updatedTime = linksRepository.update(id, OffsetDateTime.now(ZoneOffset.UTC)).lastUpdate();
         assertThat(updatedTime.isAfter(timeBefore)).isTrue();
     }
 }

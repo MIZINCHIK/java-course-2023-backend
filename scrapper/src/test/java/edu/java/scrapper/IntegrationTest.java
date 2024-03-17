@@ -43,8 +43,6 @@ public abstract class IntegrationTest {
             database =
                 DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
             Path changelog = Path.of(System.getProperty("user.dir")).getParent().resolve("migrations");
-//            Map<String, Object> scopedSettings = new LinkedHashMap<>();
-//            scopedSettings.put(Scope.Attr.resourceAccessor.name(), new DirectoryResourceAccessor(changelog));
             Scope.child(Scope.Attr.resourceAccessor, new DirectoryResourceAccessor(changelog), () -> {
                 new CommandScope(UpdateCommandStep.COMMAND_NAME)
                     .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
