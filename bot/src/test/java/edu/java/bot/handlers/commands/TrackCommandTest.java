@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -58,7 +59,7 @@ public class TrackCommandTest {
     @Test
     @DisplayName("User not registered")
     void handle_whenUserNotRegistered_thenFailure() {
-        Mockito.when(userStorage.isUserRegistered(any())).thenReturn(false);
+        Mockito.when(userStorage.isUserRegistered(anyLong())).thenReturn(false);
         Command track = new TrackCommand(bot, userStorage, linkStorage);
         track.handle(message, new String[] {"/track", "https://stackoverflow.com"});
         verify(bot).respond(any(), any(), stringCaptor.capture());
@@ -69,7 +70,7 @@ public class TrackCommandTest {
     @Test
     @DisplayName("Incorrect link")
     void handle_whenIncorrectLink_thenFailure() {
-        Mockito.when(userStorage.isUserRegistered(any())).thenReturn(true);
+        Mockito.when(userStorage.isUserRegistered(anyLong())).thenReturn(true);
         Command track = new TrackCommand(bot, userStorage, linkStorage);
         track.handle(message, new String[] {"/track", "sdfsdfdsf"});
         verify(bot).respond(any(), any(), stringCaptor.capture());
@@ -80,7 +81,7 @@ public class TrackCommandTest {
     @Test
     @DisplayName("Domain not supported")
     void handle_whenDomainNotSupported_thenFailure() {
-        Mockito.when(userStorage.isUserRegistered(any())).thenReturn(true);
+        Mockito.when(userStorage.isUserRegistered(anyLong())).thenReturn(true);
         Command track = new TrackCommand(bot, userStorage, linkStorage);
         track.handle(message, new String[] {"/track", "https://google.com"});
         verify(bot).respond(any(), any(), stringCaptor.capture());
@@ -91,7 +92,7 @@ public class TrackCommandTest {
     @Test
     @DisplayName("Domain not supported")
     void handle_whenStackoverflow_thenSuccess() {
-        Mockito.when(userStorage.isUserRegistered(any())).thenReturn(true);
+        Mockito.when(userStorage.isUserRegistered(anyLong())).thenReturn(true);
         Command track = new TrackCommand(bot, userStorage, linkStorage);
         track.handle(message, new String[] {"/track", "https://stackoverflow.com"});
         verify(bot).respond(any(), any(), stringCaptor.capture());
