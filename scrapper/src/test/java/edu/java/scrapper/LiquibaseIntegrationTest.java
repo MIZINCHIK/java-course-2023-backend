@@ -7,5 +7,6 @@ class LiquibaseIntegrationTest extends IntegrationTest {
     @Test
     void test() {
         Assertions.assertTrue(POSTGRES.isRunning());
+        System.out.println(POSTGRES.getJdbcUrl());
     }
 }
