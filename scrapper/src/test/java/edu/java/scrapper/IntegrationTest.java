@@ -3,8 +3,6 @@ package edu.java.scrapper;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import liquibase.Scope;
 import liquibase.UpdateSummaryEnum;
 import liquibase.command.CommandScope;
@@ -45,9 +43,9 @@ public abstract class IntegrationTest {
             database =
                 DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
             Path changelog = Path.of(System.getProperty("user.dir")).getParent().resolve("migrations");
-            Map<String, Object> scopedSettings = new LinkedHashMap<>();
-            scopedSettings.put(Scope.Attr.resourceAccessor.name(), new DirectoryResourceAccessor(changelog));
-            Scope.child(scopedSettings, () -> {
+//            Map<String, Object> scopedSettings = new LinkedHashMap<>();
+//            scopedSettings.put(Scope.Attr.resourceAccessor.name(), new DirectoryResourceAccessor(changelog));
+            Scope.child(Scope.Attr.resourceAccessor, new DirectoryResourceAccessor(changelog), () -> {
                 new CommandScope(UpdateCommandStep.COMMAND_NAME)
                     .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
                     .addArgumentValue(UpdateCommandStep.CHANGELOG_FILE_ARG, "master.xml")
