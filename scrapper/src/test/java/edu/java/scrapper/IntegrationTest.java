@@ -32,7 +32,8 @@ public abstract class IntegrationTest {
         POSTGRES = new PostgreSQLContainer<>("postgres:15")
             .withDatabaseName("scrapper")
             .withUsername("postgres")
-            .withPassword("postgres");
+            .withPassword("postgres")
+            .withUrlParam("autosave", "always");
         POSTGRES.start();
 
         runMigrations(POSTGRES);
