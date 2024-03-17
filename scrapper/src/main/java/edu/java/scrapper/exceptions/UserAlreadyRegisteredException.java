@@ -6,4 +6,8 @@ public class UserAlreadyRegisteredException extends IllegalStateException {
     public UserAlreadyRegisteredException() {
         super(MESSAGE);
     }
+
+    public UserAlreadyRegisteredException(Throwable cause) {
+        super(MESSAGE, cause);
+    }
 }

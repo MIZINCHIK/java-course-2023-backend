@@ -6,4 +6,8 @@ public class LinkNotTrackedException extends IllegalStateException {
     public LinkNotTrackedException() {
         super(MESSAGE);
     }
+
+    public LinkNotTrackedException(Throwable cause) {
+        super(MESSAGE, cause);
+    }
 }
