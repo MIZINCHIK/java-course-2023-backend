@@ -22,9 +22,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/scrapper?autosave=always
     username: postgres
     password: postgres
-    tomcat:
-      connection-properties:
-        autosave: true
+
 server:
   port: 8080
 
