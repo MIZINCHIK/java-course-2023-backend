@@ -56,6 +56,8 @@ public class JdbcLinkService implements ModifiableLinkStorage {
         }
         try {
             return followingLinksDao.add(userId, linkId).linkId();
+        } catch (DuplicateKeyException ignored) {
+            return linkId;
         } catch (DataIntegrityViolationException e) {
             throw new UserNotRegisteredException(e);
         }
@@ -106,5 +108,10 @@ public class JdbcLinkService implements ModifiableLinkStorage {
         return followingLinksDao.findByLinkId(id).stream()
             .map(FollowingData::userId)
             .toList();
+    }
+
+    @Override
+    public void removeLink(String url) {
+        linksDao.remove(url);
     }
 }
