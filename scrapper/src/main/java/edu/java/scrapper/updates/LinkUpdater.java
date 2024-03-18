@@ -29,7 +29,7 @@ public class LinkUpdater {
     private final StackOverflowClient stackOverflowClient;
     private final GitHubClient gitHubClient;
     private final BotClient botClient;
-    private final ModifiableLinkStorage linkStorage;
+    private final ModifiableLinkStorage jdbcLinkService;
 
     public void checkLinks(List<LinkDto> links) {
         links.forEach(this::checkLink);
@@ -44,7 +44,7 @@ public class LinkUpdater {
                 case null, default -> log.error("");
             }
         } catch (MalformedUrlException ignored) {
-            linkStorage.removeLink(linkDto.url());
+            jdbcLinkService.removeLink(linkDto.url());
         } catch (IncorrectStackoverflowIdsParameter ignored) {
         }
     }
@@ -67,7 +67,7 @@ public class LinkUpdater {
         if (!updateLinkCheckUpDate(lastActivityDate, lastAnswerDate, prior, linkDto).isAfter(linkDto.lastUpdate())) {
             return;
         }
-        List<Long> chats = linkStorage.getUsersByLink(linkDto.id());
+        List<Long> chats = jdbcLinkService.getUsersByLink(linkDto.id());
         botClient.sendUpdate(
             new LinkUpdate(
                 linkDto.id(),
@@ -105,7 +105,7 @@ public class LinkUpdater {
         if (!updateLinkCheckUpDate(lastActivityDate, lastCommitDate, prior, linkDto).isAfter(linkDto.lastUpdate())) {
             return;
         }
-        List<Long> chats = linkStorage.getUsersByLink(linkDto.id());
+        List<Long> chats = jdbcLinkService.getUsersByLink(linkDto.id());
         botClient.sendUpdate(
             new LinkUpdate(
                 linkDto.id(),
@@ -133,7 +133,7 @@ public class LinkUpdater {
     ) {
         OffsetDateTime lastObservedEventDate =
             lastActivityDate.isAfter(lastHandledEventDate) ? lastActivityDate : lastHandledEventDate;
-        linkStorage.updateLink(
+        jdbcLinkService.updateLink(
             linkDto.id(),
             priorDate.isBefore(lastObservedEventDate) ? lastObservedEventDate : priorDate
         );
