@@ -38,10 +38,10 @@ public class LinkUpdater {
     }
 
     private void sendUpdate(LinkDto linkDto, OffsetDateTime updateTime, OffsetDateTime prior) {
+        linkStorage.updateLink(linkDto.id(), prior.isBefore(updateTime) ? updateTime : prior);
         if (!updateTime.isAfter(linkDto.lastUpdate())) {
             return;
         }
-        linkStorage.updateLink(linkDto.id(), prior.isAfter(updateTime) ? updateTime : prior);
         botClient.sendUpdate(
             new LinkUpdate(
                 linkDto.id(),
