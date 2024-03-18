@@ -8,13 +8,6 @@ import edu.java.scrapper.dto.LinkDto;
 import edu.java.scrapper.exceptions.LinkNotTrackedException;
 import edu.java.scrapper.exceptions.UserNotRegisteredException;
 import edu.java.scrapper.service.ModifiableLinkStorage;
-import lombok.RequiredArgsConstructor;
-import org.jooq.DSLContext;
-import org.jooq.exception.NoDataFoundException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.net.URI;
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -23,7 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
+import lombok.RequiredArgsConstructor;
+import org.jooq.DSLContext;
+import org.jooq.exception.NoDataFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import static edu.java.scrapper.domain.jooq.tables.FollowingLinks.FOLLOWING_LINKS;
 import static edu.java.scrapper.domain.jooq.tables.Links.LINKS;
 
@@ -57,8 +55,8 @@ public class JooqLinkService implements ModifiableLinkStorage {
         Long id;
         try {
             id = dslContext.insertInto(LINKS, LINKS.URL, LINKS.SERVICE, LINKS.LAST_UPDATE)
-                    .values(link.getUrl().toString(), ExternalService.valueOf(link.getDomain().name), OffsetDateTime.now(
-                            ZoneOffset.UTC))
+                    .values(link.getUrl().toString(), ExternalService.valueOf(link.getDomain().name),
+                            OffsetDateTime.now(ZoneOffset.UTC))
                     .onDuplicateKeyIgnore()
                     .returningResult(LINKS.ID)
                     .fetchSingle(LINKS.ID, Long.class);
