@@ -22,6 +22,9 @@ public class UpdateHandler {
             return;
         }
         String[] args = message.text().trim().split(" ");
-        commands.getOrDefault(args[0], unknownCommand).handle(message, args);
+        try {
+            commands.getOrDefault(args[0], unknownCommand).handle(message, args);
+        } catch (Exception e) {
+        }
     }
 }

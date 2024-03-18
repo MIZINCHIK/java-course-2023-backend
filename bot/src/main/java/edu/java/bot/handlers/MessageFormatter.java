@@ -8,6 +8,7 @@ import java.util.List;
 import net.steppschuh.markdowngenerator.table.Table;
 import net.steppschuh.markdowngenerator.text.code.CodeBlock;
 import static edu.java.model.links.Link.isLinkCorrect;
+import static java.lang.System.lineSeparator;
 
 public class MessageFormatter {
     private MessageFormatter() {
@@ -36,6 +37,13 @@ public class MessageFormatter {
     }
 
     public static String formUpdateMessage(LinkUpdate update) {
-        return "The following URL: " + update.url() + " with description " + update.description() + " has been updated";
+        return "The following URL has been updated: " +
+                lineSeparator() +
+                update.url() +
+                lineSeparator() +
+                "With description: " +
+                lineSeparator() +
+                update.description() +
+                lineSeparator();
     }
 }
