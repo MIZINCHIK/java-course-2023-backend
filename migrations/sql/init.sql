@@ -24,8 +24,7 @@ create table if not exists following_links
     link_id    bigint,
 
     foreign key (user_id) references users (id) on delete cascade,
-    foreign key (link_id) references links (id) on delete cascade, -- удаление здесь
--- поддерживать по идее не нужно, но в требованиях к дз это есть
+    foreign key (link_id) references links (id) on delete cascade,
     primary key (link_id, user_id)
 -- нагуглил, что от порядка колонок в мультиколоночном PK зависит скорость поиска по этим колонкам
 -- решил не создавать отдельный индекс для link_id, а оптимизировать тут
