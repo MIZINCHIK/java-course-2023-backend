@@ -18,7 +18,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 @RequiredArgsConstructor
 public class LinkUpdaterScheduler {
     private static final String STUB = "I'm scheduled \uD83C\uDF48 \uD83D\uDC04 \uD83D\uDC33";
-    private static final String UNKNOWN_LINK = "Unknown link domain";
     private final ModifiableLinkStorage linkStorage;
     private final LinkUpdater linkUpdater;
     @Value(value = "#{@scheduler.forceCheckDelay()}")
