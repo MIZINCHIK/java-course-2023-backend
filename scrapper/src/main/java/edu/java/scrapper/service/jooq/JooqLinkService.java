@@ -112,11 +112,11 @@ public class JooqLinkService implements ModifiableLinkStorage {
         return dslContext.selectFrom(LINKS)
             .where(LINKS.LAST_UPDATE.lessOrEqual(OffsetDateTime.now(ZoneOffset.UTC).minus(expirationInterval)))
             .stream()
-            .map(record -> new LinkDto(
-                Objects.requireNonNull(record.getId()),
-                record.getUrl(),
-                LinkDomain.of(record.getService().getLiteral()),
-                record.getLastUpdate()
+            .map(linksRecord -> new LinkDto(
+                Objects.requireNonNull(linksRecord.getId()),
+                linksRecord.getUrl(),
+                LinkDomain.of(linksRecord.getService().getLiteral()),
+                linksRecord.getLastUpdate()
             ))
             .toList();
     }

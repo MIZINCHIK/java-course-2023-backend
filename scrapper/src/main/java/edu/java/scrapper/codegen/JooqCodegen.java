@@ -8,7 +8,12 @@ import org.jooq.meta.jaxb.Generator;
 import org.jooq.meta.jaxb.Jdbc;
 import org.jooq.meta.jaxb.Target;
 
+@SuppressWarnings({"MultipleStringLiterals", "UncommentedMain"})
 public class JooqCodegen {
+    private JooqCodegen() {
+        throw new IllegalStateException();
+    }
+
     public static void main(String[] args) throws Exception {
         Generate options = new Generate()
             .withGeneratedAnnotation(true)
