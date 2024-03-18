@@ -6,4 +6,8 @@ public class MalformedUrlException extends IllegalStateException {
     public MalformedUrlException() {
         super(MESSAGE);
     }
+
+    public MalformedUrlException(Throwable cause) {
+        super(MESSAGE, cause);
+    }
 }
