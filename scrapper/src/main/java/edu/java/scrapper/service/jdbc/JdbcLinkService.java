@@ -56,6 +56,8 @@ public class JdbcLinkService implements ModifiableLinkStorage {
         }
         try {
             return followingLinksDao.add(userId, linkId).linkId();
+        } catch (DuplicateKeyException e) {
+            return linkId;
         } catch (DataIntegrityViolationException e) {
             throw new UserNotRegisteredException(e);
         }
