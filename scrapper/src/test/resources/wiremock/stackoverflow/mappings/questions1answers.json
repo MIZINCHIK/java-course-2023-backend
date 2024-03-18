@@ -1,0 +1,13 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/questions/75844487/answers?site=stackoverflow.com"
+    },
+    "response": {
+        "status": 200,
+        "body": "{\n  \"items\": [\n    {\n      \"owner\": {\n        \"account_id\": 1884,\n        \"reputation\": 13758,\n        \"user_id\": 2597,\n        \"user_type\": \"registered\",\n        \"accept_rate\": 82,\n        \"profile_image\": \"https://www.gravatar.com/avatar/016bfc7a7b66addac54adb589b0868fe?s=256&d=identicon&r=PG\",\n        \"display_name\": \"Tom Lokhorst\",\n        \"link\": \"https://stackoverflow.com/users/2597/tom-lokhorst\"\n      },\n      \"is_accepted\": false,\n      \"score\": 23,\n      \"last_activity_date\": 1621249485,\n      \"last_edit_date\": 1621249485,\n      \"creation_date\": 1219497585,\n      \"answer_id\": 24219,\n      \"question_id\": 16918,\n      \"content_license\": \"CC BY-SA 4.0\"\n    },\n    {\n      \"owner\": {\n        \"account_id\": 989,\n        \"reputation\": 4127,\n        \"user_id\": 1311,\n        \"user_type\": \"registered\",\n        \"accept_rate\": 80,\n        \"profile_image\": \"https://www.gravatar.com/avatar/cfd54d3da124f9abd0b875ac8cc6e512?s=256&d=identicon&r=PG\",\n        \"display_name\": \"Pascal\",\n        \"link\": \"https://stackoverflow.com/users/1311/pascal\"\n      },\n      \"is_accepted\": true,\n      \"score\": 49,\n      \"last_activity_date\": 1463054556,\n      \"last_edit_date\": 1463054556,\n      \"creation_date\": 1219179850,\n      \"answer_id\": 16951,\n      \"question_id\": 16918,\n      \"content_license\": \"CC BY-SA 3.0\"\n    }]}",
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+}
