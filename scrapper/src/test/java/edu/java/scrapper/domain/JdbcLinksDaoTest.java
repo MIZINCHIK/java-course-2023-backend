@@ -3,6 +3,7 @@ package edu.java.scrapper.domain;
 import edu.java.model.links.Link;
 import edu.java.model.links.LinkDomain;
 import edu.java.scrapper.IntegrationTest;
+import edu.java.scrapper.domain.jdbc.JdbcLinksDao;
 import edu.java.scrapper.dto.LinkDto;
 import java.sql.Types;
 import java.time.Duration;
