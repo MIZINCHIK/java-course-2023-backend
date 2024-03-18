@@ -8,6 +8,13 @@ import edu.java.scrapper.dto.LinkDto;
 import edu.java.scrapper.exceptions.LinkNotTrackedException;
 import edu.java.scrapper.exceptions.UserNotRegisteredException;
 import edu.java.scrapper.service.ModifiableLinkStorage;
+import lombok.RequiredArgsConstructor;
+import org.jooq.DSLContext;
+import org.jooq.exception.NoDataFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.net.URI;
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -16,12 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import lombok.RequiredArgsConstructor;
-import org.jooq.DSLContext;
-import org.jooq.exception.NoDataFoundException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 import static edu.java.scrapper.domain.jooq.tables.FollowingLinks.FOLLOWING_LINKS;
 import static edu.java.scrapper.domain.jooq.tables.Links.LINKS;
 
@@ -35,11 +37,11 @@ public class JooqLinkService implements ModifiableLinkStorage {
     public List<LinkResponse> getLinksByUserId(long userId) {
         List<LinkResponse> links = new ArrayList<>();
         Map<Long, String> urls = dslContext.select(LINKS.ID, LINKS.URL)
-            .from(FOLLOWING_LINKS)
-            .join(LINKS)
-            .on(FOLLOWING_LINKS.USER_ID.eq(userId))
-            .and(LINKS.ID.eq(FOLLOWING_LINKS.LINK_ID))
-            .fetchMap(LINKS.ID, LINKS.URL);
+                .from(FOLLOWING_LINKS)
+                .join(LINKS)
+                .on(FOLLOWING_LINKS.USER_ID.eq(userId))
+                .and(LINKS.ID.eq(FOLLOWING_LINKS.LINK_ID))
+                .fetchMap(LINKS.ID, LINKS.URL);
         for (long id : urls.keySet()) {
             try {
                 links.add(new LinkResponse(id, URI.create(urls.get(id))));
@@ -55,19 +57,19 @@ public class JooqLinkService implements ModifiableLinkStorage {
         Long id;
         try {
             id = dslContext.insertInto(LINKS, LINKS.URL, LINKS.SERVICE, LINKS.LAST_UPDATE)
-                .values(link.getUrl().toString(), ExternalService.valueOf(link.getDomain().name), OffsetDateTime.now(
-                    ZoneOffset.UTC))
-                .onDuplicateKeyIgnore()
-                .returningResult(LINKS.ID)
-                .fetchSingle(LINKS.ID, Long.class);
+                    .values(link.getUrl().toString(), ExternalService.valueOf(link.getDomain().name), OffsetDateTime.now(
+                            ZoneOffset.UTC))
+                    .onDuplicateKeyIgnore()
+                    .returningResult(LINKS.ID)
+                    .fetchSingle(LINKS.ID, Long.class);
         } catch (NoDataFoundException ignored) {
             id = getLinkId(link);
         }
         try {
             dslContext.insertInto(FOLLOWING_LINKS, FOLLOWING_LINKS.LINK_ID, FOLLOWING_LINKS.USER_ID)
-                .values(id, userId)
-                .onDuplicateKeyIgnore()
-                .execute();
+                    .values(id, userId)
+                    .onDuplicateKeyIgnore()
+                    .execute();
             return Objects.requireNonNull(id);
         } catch (DataIntegrityViolationException e) {
             throw new UserNotRegisteredException(e);
@@ -76,9 +78,9 @@ public class JooqLinkService implements ModifiableLinkStorage {
 
     private Long getLinkId(Link link) {
         return dslContext.select()
-            .from(LINKS)
-            .where(LINKS.URL.eq(link.getUrl().toString()))
-            .fetchOne(LINKS.ID, Long.class);
+                .from(LINKS)
+                .where(LINKS.URL.eq(link.getUrl().toString()))
+                .fetchOne(LINKS.ID, Long.class);
     }
 
     @Transactional
@@ -89,20 +91,20 @@ public class JooqLinkService implements ModifiableLinkStorage {
             throw new LinkNotTrackedException();
         }
         dslContext.deleteFrom(FOLLOWING_LINKS)
-            .where(FOLLOWING_LINKS.USER_ID.eq(userId))
-            .and(FOLLOWING_LINKS.LINK_ID.eq(linkId))
-            .execute();
+                .where(FOLLOWING_LINKS.USER_ID.eq(userId))
+                .and(FOLLOWING_LINKS.LINK_ID.eq(linkId))
+                .execute();
         return linkId;
     }
 
     @Override
     public boolean isLinkTracked(Link link, long userId) {
         return dslContext.fetchExists(
-            dslContext.selectOne().from(FOLLOWING_LINKS)
-                .where(FOLLOWING_LINKS.USER_ID.eq(userId))
-                .and(FOLLOWING_LINKS.LINK_ID.eq(
-                    getLinkId(link)
-                ))
+                dslContext.selectOne().from(FOLLOWING_LINKS)
+                        .where(FOLLOWING_LINKS.USER_ID.eq(userId))
+                        .and(FOLLOWING_LINKS.LINK_ID.eq(
+                                getLinkId(link)
+                        ))
         );
     }
 
@@ -110,24 +112,25 @@ public class JooqLinkService implements ModifiableLinkStorage {
     @Override
     public List<LinkDto> getLinksWithExpiredCheckTime(Duration expirationInterval) {
         return dslContext.selectFrom(LINKS)
-            .where(LINKS.LAST_UPDATE.lessOrEqual(OffsetDateTime.now(ZoneOffset.UTC).minus(expirationInterval)))
-            .stream()
-            .map(linksRecord -> new LinkDto(
-                Objects.requireNonNull(linksRecord.getId()),
-                linksRecord.getUrl(),
-                LinkDomain.of(linksRecord.getService().getLiteral()),
-                linksRecord.getLastUpdate()
-            ))
-            .toList();
+                .where(LINKS.LAST_UPDATE.lessOrEqual(OffsetDateTime.now(ZoneOffset.UTC).minus(expirationInterval)))
+                .stream()
+                .map(linksRecord -> new LinkDto(
+                        Objects.requireNonNull(linksRecord.getId()),
+                        linksRecord.getUrl(),
+                        LinkDomain.of(linksRecord.getService().getLiteral()),
+                        linksRecord.getLastUpdate()
+                ))
+                .toList();
     }
 
     @Override
     public void updateLink(long linkId, OffsetDateTime time) {
         try {
             dslContext.update(LINKS)
-                .set(LINKS.LAST_UPDATE, time)
-                .returning(LINKS.ID)
-                .fetchSingle();
+                    .set(LINKS.LAST_UPDATE, time)
+                    .where(LINKS.ID.eq(linkId))
+                    .returning(LINKS.ID)
+                    .fetchSingle();
         } catch (NoDataFoundException e) {
             throw new LinkNotTrackedException(e);
         }
@@ -136,14 +139,14 @@ public class JooqLinkService implements ModifiableLinkStorage {
     @Override
     public List<Long> getUsersByLink(Long id) {
         return dslContext.selectFrom(FOLLOWING_LINKS)
-            .where(FOLLOWING_LINKS.LINK_ID.eq(id))
-            .fetch(FOLLOWING_LINKS.USER_ID);
+                .where(FOLLOWING_LINKS.LINK_ID.eq(id))
+                .fetch(FOLLOWING_LINKS.USER_ID);
     }
 
     @Override
     public void removeLink(String url) {
         dslContext.deleteFrom(LINKS)
-            .where(LINKS.URL.eq(url))
-            .execute();
+                .where(LINKS.URL.eq(url))
+                .execute();
     }
 }

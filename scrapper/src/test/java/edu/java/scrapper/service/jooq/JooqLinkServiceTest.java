@@ -6,17 +6,19 @@ import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.dto.LinkDto;
 import edu.java.scrapper.exceptions.LinkNotTrackedException;
 import edu.java.scrapper.exceptions.UserNotRegisteredException;
-import java.net.URISyntaxException;
-import java.time.Duration;
-import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.net.URISyntaxException;
+import java.time.Duration;
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -148,8 +150,8 @@ public class JooqLinkServiceTest extends IntegrationTest {
     void updateLink_whenHasBeenTracked_thenSuccess() {
         userService.registerUser(0L);
         Link link = new Link("https://github.com/asdsadad");
-        linkService.trackLink(link, 0L);
-        assertDoesNotThrow(() -> linkService.updateLink(0L, OffsetDateTime.now()));
+        Long linkId = linkService.trackLink(link, 0L);
+        assertDoesNotThrow(() -> linkService.updateLink(linkId, OffsetDateTime.now()));
         assertThat(linkService.isLinkTracked(link, 0L)).isTrue();
     }
 
