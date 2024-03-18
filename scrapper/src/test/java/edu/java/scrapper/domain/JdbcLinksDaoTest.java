@@ -4,7 +4,6 @@ import edu.java.model.links.Link;
 import edu.java.model.links.LinkDomain;
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.dto.LinkDto;
-
 import java.sql.Types;
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -14,7 +13,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,7 +28,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -211,12 +208,42 @@ public class JdbcLinksDaoTest extends IntegrationTest {
     void findAllExpired_whenCalled_thenCorrect() {
         assertThat(linksRepository.findAllExpired(Duration.of(3L, ChronoUnit.DAYS)).size()).isEqualTo(0);
         List<LinkDto> links = List.of(
-            new LinkDto(1, "asdsadsaddsa", LinkDomain.SOF, OffsetDateTime.now(ZoneOffset.UTC).minusDays(16).truncatedTo(ChronoUnit.SECONDS)),
-            new LinkDto(1, "asdsa", LinkDomain.SOF, OffsetDateTime.now(ZoneOffset.UTC).plusDays(1).truncatedTo(ChronoUnit.SECONDS)),
-            new LinkDto(1, "asdsadsgddsaddsa", LinkDomain.SOF, OffsetDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS)),
-            new LinkDto(1, "123", LinkDomain.SOF, OffsetDateTime.now(ZoneOffset.UTC).minusDays(3).truncatedTo(ChronoUnit.SECONDS)),
-            new LinkDto(1, "456", LinkDomain.SOF, OffsetDateTime.now(ZoneOffset.UTC).minusDays(2).truncatedTo(ChronoUnit.SECONDS)),
-            new LinkDto(1, "789", LinkDomain.SOF, OffsetDateTime.now(ZoneOffset.UTC).minusDays(1).truncatedTo(ChronoUnit.SECONDS))
+            new LinkDto(
+                1,
+                "asdsadsaddsa",
+                LinkDomain.SOF,
+                OffsetDateTime.now(ZoneOffset.UTC).minusDays(16).truncatedTo(ChronoUnit.SECONDS)
+            ),
+            new LinkDto(
+                1,
+                "asdsa",
+                LinkDomain.SOF,
+                OffsetDateTime.now(ZoneOffset.UTC).plusDays(1).truncatedTo(ChronoUnit.SECONDS)
+            ),
+            new LinkDto(
+                1,
+                "asdsadsgddsaddsa",
+                LinkDomain.SOF,
+                OffsetDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS)
+            ),
+            new LinkDto(
+                1,
+                "123",
+                LinkDomain.SOF,
+                OffsetDateTime.now(ZoneOffset.UTC).minusDays(3).truncatedTo(ChronoUnit.SECONDS)
+            ),
+            new LinkDto(
+                1,
+                "456",
+                LinkDomain.SOF,
+                OffsetDateTime.now(ZoneOffset.UTC).minusDays(2).truncatedTo(ChronoUnit.SECONDS)
+            ),
+            new LinkDto(
+                1,
+                "789",
+                LinkDomain.SOF,
+                OffsetDateTime.now(ZoneOffset.UTC).minusDays(1).truncatedTo(ChronoUnit.SECONDS)
+            )
         );
         for (var link : links) {
             jdbcClient.sql("INSERT INTO links (url, service, last_update) VALUES (:url, :service, :last_update)")
@@ -295,7 +322,8 @@ public class JdbcLinksDaoTest extends IntegrationTest {
     @Rollback
     @DisplayName("Update ids not found")
     void update_whenIdDoesNotExist_thenException() {
-        assertThatThrownBy(() -> linksRepository.update(0L, OffsetDateTime.now())).isInstanceOf(EmptyResultDataAccessException.class);
+        assertThatThrownBy(() -> linksRepository.update(0L, OffsetDateTime.now())).isInstanceOf(
+            EmptyResultDataAccessException.class);
     }
 
     @Test

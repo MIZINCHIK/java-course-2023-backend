@@ -1,11 +1,13 @@
 package edu.java.scrapper;
 
+import liquibase.exception.DatabaseException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class LiquibaseIntegrationTest extends IntegrationTest {
+public class LiquibaseIntegrationTest extends IntegrationTest {
     @Test
-    void test() {
+    void test() throws DatabaseException {
         Assertions.assertTrue(POSTGRES.isRunning());
+        Assertions.assertFalse(database.getConnection().isClosed());
     }
 }
