@@ -131,8 +131,12 @@ public class LinkUpdater {
         OffsetDateTime priorDate,
         LinkDto linkDto
     ) {
-        OffsetDateTime lastObservedEventDate = lastActivityDate.isAfter(lastHandledEventDate) ? lastActivityDate : lastHandledEventDate;
-        linkStorage.updateLink(linkDto.id(), priorDate.isBefore(lastObservedEventDate) ? lastObservedEventDate : priorDate);
+        OffsetDateTime lastObservedEventDate =
+            lastActivityDate.isAfter(lastHandledEventDate) ? lastActivityDate : lastHandledEventDate;
+        linkStorage.updateLink(
+            linkDto.id(),
+            priorDate.isBefore(lastObservedEventDate) ? lastObservedEventDate : priorDate
+        );
         return lastObservedEventDate;
     }
 }

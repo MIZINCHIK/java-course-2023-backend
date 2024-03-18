@@ -37,13 +37,13 @@ public class MessageFormatter {
     }
 
     public static String formUpdateMessage(LinkUpdate update) {
-        return "The following URL has been updated: " +
-                lineSeparator() +
-                update.url() +
-                lineSeparator() +
-                "With description: " +
-                lineSeparator() +
-                update.description() +
-                lineSeparator();
+        return "The following URL has been updated: "
+            + lineSeparator()
+            + update.url()
+            + lineSeparator()
+            + "With description: "
+            + lineSeparator()
+            + update.description()
+            + lineSeparator();
     }
 }

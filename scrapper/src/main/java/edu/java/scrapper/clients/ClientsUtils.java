@@ -9,14 +9,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ClientsUtils {
-    private static final Pattern GITHUB_PATTERN = Pattern.compile("^(?:https:\\/\\/)?(?:www\\.)?github\\.com\\/([^\\/]*)\\/([^\\/]*)(\\/.*)*$");
-    private static final Pattern STACKOVERFLOW_PATTERN = Pattern.compile("^(?:https:\\/\\/)?(?:www\\.)?stackoverflow\\.com\\/questions\\/(\\d*)(\\/.*)*$");
+    private static final Pattern GITHUB_PATTERN = Pattern.compile(
+        "^(?:https:\\/\\/)?(?:www\\.)?github\\.com\\/([^\\/]*)\\/([^\\/]*)(\\/.*)*$");
+    private static final Pattern STACKOVERFLOW_PATTERN = Pattern.compile(
+        "^(?:https:\\/\\/)?(?:www\\.)?stackoverflow\\.com\\/questions\\/(\\d*)(\\/.*)*$");
 
     private ClientsUtils() {
         throw new IllegalStateException();
     }
 
-    public static <T> T sendStackoverflowRequest(String url, Function<String, T> requester) throws MalformedUrlException {
+    public static <T> T sendStackoverflowRequest(String url, Function<String, T> requester)
+        throws MalformedUrlException {
         Matcher matcher = STACKOVERFLOW_PATTERN.matcher(url);
         if (matcher.find()) {
             return requester.apply(matcher.group(1));
@@ -25,7 +28,8 @@ public class ClientsUtils {
         }
     }
 
-    public static <T> T sendGithubRequest(String url, BiFunction<String, String, T> requester) throws MalformedUrlException {
+    public static <T> T sendGithubRequest(String url, BiFunction<String, String, T> requester)
+        throws MalformedUrlException {
         Matcher matcher = GITHUB_PATTERN.matcher(url);
         if (matcher.find()) {
             return requester.apply(matcher.group(1), matcher.group(2));
