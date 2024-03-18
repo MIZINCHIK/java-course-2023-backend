@@ -1,21 +1,22 @@
-package edu.java.scrapper.service.jdbc;
+package edu.java.scrapper.service.jooq;
 
 import edu.java.model.storage.UserStorage;
-import edu.java.scrapper.domain.jdbc.JdbcUsersDao;
 import edu.java.scrapper.exceptions.UserAlreadyRegisteredException;
 import lombok.RequiredArgsConstructor;
+import org.jooq.DSLContext;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import static edu.java.scrapper.domain.jooq.Tables.USERS;
 
 @Service
 @RequiredArgsConstructor
-public class JdbcUserService implements UserStorage {
-    private final JdbcUsersDao usersDao;
+public class JooqUserService implements UserStorage {
+    private final DSLContext dslContext;
 
     @Override
-    public void registerUser(long userId) throws UserAlreadyRegisteredException {
+    public void registerUser(long userId) {
         try {
-            usersDao.add(userId);
+            dslContext.insertInto(USERS, USERS.ID).values(userId).execute();
         } catch (DuplicateKeyException e) {
             throw new UserAlreadyRegisteredException(e);
         }
@@ -23,11 +24,11 @@ public class JdbcUserService implements UserStorage {
 
     @Override
     public boolean isUserRegistered(long userId) {
-        return usersDao.isUserRegistered(userId);
+        return dslContext.fetchExists(dslContext.selectOne().from(USERS).where(USERS.ID.eq(userId)));
     }
 
     @Override
     public void deleteUser(long userId) {
-        usersDao.remove(userId);
+        dslContext.deleteFrom(USERS).where(USERS.ID.eq(userId)).execute();
     }
 }
