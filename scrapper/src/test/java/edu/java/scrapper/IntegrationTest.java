@@ -33,8 +33,7 @@ public abstract class IntegrationTest {
         POSTGRES = new PostgreSQLContainer<>("postgres:15")
             .withDatabaseName("scrapper")
             .withUsername("postgres")
-            .withPassword("postgres")
-            .withUrlParam("autosave", "always");
+            .withPassword("postgres");
         POSTGRES.start();
     }
 
@@ -45,7 +44,12 @@ public abstract class IntegrationTest {
             Connection connection = DriverManager.getConnection(c.getJdbcUrl(), c.getUsername(), c.getPassword());
             database =
                 DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
-            Path changelog = Path.of(System.getProperty("user.dir")).getParent().resolve("migrations");
+            Path changelog = Path.of(System.getProperty("user.dir")).getParent()
+                .resolve("scrapper")
+                .resolve("src")
+                .resolve("main")
+                .resolve("resources")
+                .resolve("migrations");
             Scope.child(Scope.Attr.resourceAccessor, new DirectoryResourceAccessor(changelog), () -> {
                 new CommandScope(UpdateCommandStep.COMMAND_NAME)
                     .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)

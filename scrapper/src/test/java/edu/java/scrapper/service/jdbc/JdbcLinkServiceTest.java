@@ -89,7 +89,7 @@ public class JdbcLinkServiceTest extends IntegrationTest {
     @Test
     @Transactional
     @Rollback
-    @DisplayName("Track link when it hasn't been tracked yet")
+    @DisplayName("Track link when it has been tracked")
     void trackLinkANDisLinkTracked_whenHasBeenTracked_thenSuccess() {
         Link link = new Link("https://www.github.com/asdsad");
         userService.registerUser(0L);

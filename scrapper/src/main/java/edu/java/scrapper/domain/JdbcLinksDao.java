@@ -8,7 +8,6 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -87,12 +86,13 @@ public class JdbcLinksDao {
             .single();
     }
 
-    public long findByUrl(String url) {
+    public Long findByUrl(String url) {
         String sql = "select id from links where url = (:url)";
-        return Objects.requireNonNull(jdbcClient.sql(sql)
+        return jdbcClient.sql(sql)
             .param("url", url, Types.VARCHAR)
             .query(Long.class)
-            .single());
+            .optional()
+            .orElse(null);
     }
 
     public LinkDto update(long linkId, OffsetDateTime time) {

@@ -303,8 +303,7 @@ public class JdbcLinksDaoTest extends IntegrationTest {
     @DisplayName("Find by id when doesn't exist")
     void findByUrl_whenDoesntExist_thenException(String url) {
         linksRepository.add(new Link(url));
-        assertThatThrownBy(() -> linksRepository.findByUrl("")).isInstanceOf(
-            EmptyResultDataAccessException.class);
+        assertThat(linksRepository.findByUrl("")).isNull();
     }
 
     @ParameterizedTest
