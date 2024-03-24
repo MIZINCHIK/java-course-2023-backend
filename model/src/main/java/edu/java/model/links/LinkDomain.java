@@ -11,6 +11,8 @@ public enum LinkDomain {
 
     public final String name;
 
+
+
     LinkDomain(String name) {
         this.name = name;
     }
@@ -34,5 +36,10 @@ public enum LinkDomain {
             case "stackoverflow.com", "www.stackoverflow.com" -> SOF;
             default -> UNSUPPORTED;
         };
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

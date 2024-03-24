@@ -3,6 +3,7 @@ package edu.java.scrapper.service.jpa;
 import edu.java.model.storage.UserStorage;
 import edu.java.scrapper.domain.jpa.UserRepository;
 import edu.java.scrapper.domain.jpa.entities.UserEntity;
+import edu.java.scrapper.exceptions.UserAlreadyRegisteredException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,9 @@ public class JpaUserService implements UserStorage {
     @Override
     @Transactional
     public void registerUser(long userId) {
+        if (userRepository.findById(userId).isPresent()) {
+            throw new UserAlreadyRegisteredException();
+        }
         userRepository.save(new UserEntity(userId));
     }
 

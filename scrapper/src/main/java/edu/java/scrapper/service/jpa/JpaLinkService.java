@@ -8,15 +8,23 @@ import edu.java.scrapper.domain.jpa.UserRepository;
 import edu.java.scrapper.domain.jpa.entities.LinkEntity;
 import edu.java.scrapper.domain.jpa.entities.UserEntity;
 import edu.java.scrapper.dto.LinkDto;
+import edu.java.scrapper.exceptions.LinkNotTrackedException;
 import edu.java.scrapper.exceptions.UserNotRegisteredException;
 import edu.java.scrapper.service.ModifiableLinkStorage;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.StaleObjectStateException;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -27,12 +35,21 @@ public class JpaLinkService implements ModifiableLinkStorage {
     @Override
     @Transactional
     public List<LinkResponse> getLinksByUserId(long userId) {
-        return linkRepository.findAllByUsers_Id(userId).stream()
-            .map(entity -> new LinkResponse(entity.getId(), entity.getUrl()))
-            .toList();
+        List<LinkResponse> links = new ArrayList<>();
+        linkRepository.findAllByUsers_Id(userId)
+                .forEach(entity -> consume(entity, links));
+        return links;
+    }
+
+    private void consume(LinkEntity linkEntity, List<LinkResponse> result) {
+        try {
+            result.add(new LinkResponse(linkEntity.getId(), URI.create(linkEntity.getUrl())));
+        } catch (Exception ignored) {
+        }
     }
 
     @Override
+    @Retryable(retryFor = ObjectOptimisticLockingFailureException.class)
     @Transactional
     public long trackLink(Link link, long userId) {
         LinkEntity linkEntity = linkRepository.findByUrl(link.getUrl().toString());
@@ -47,45 +64,64 @@ public class JpaLinkService implements ModifiableLinkStorage {
         if (userEntity == null) {
             throw new UserNotRegisteredException();
         }
-        if (!linkRepository.existsByUsers_Id(userId)) {
+        if (!linkRepository.existsByIdAndUsers_Id(linkEntity.getId(), userId)) {
             linkEntity.getUsers().add(userEntity);
         }
-        return linkEntity.getId();
+        return linkRepository.save(linkEntity).getId();
     }
 
     @Override
     @Transactional
     public long untrackLink(Link link, long userId) {
-        return 0;
+        LinkEntity linkEntity = linkRepository.findByUrl(link.getUrl().toString());
+        if (linkEntity == null) {
+            throw new LinkNotTrackedException();
+        }
+        linkEntity.getUsers().removeIf(user -> user.getId() == userId);
+        linkRepository.save(linkEntity);
+        return linkEntity.getId();
     }
 
     @Override
+    @Retryable(retryFor = {StaleObjectStateException.class, ObjectOptimisticLockingFailureException.class})
     @Transactional
     public boolean isLinkTracked(Link link, long userId) {
-        return false;
+        LinkEntity linkEntity = linkRepository.findByUrl(link.getUrl().toString());
+        return linkEntity != null && linkRepository.existsByIdAndUsers_Id(linkEntity.getId(), userId);
     }
 
     @Override
     @Transactional
     public List<LinkDto> getLinksWithExpiredCheckTime(Duration expirationInterval) {
-        return null;
+        return linkRepository.findAllByLastUpdateLessThan(OffsetDateTime.now(ZoneOffset.UTC).minus(expirationInterval))
+                .stream()
+                .map(entity -> new LinkDto(entity.getId(), entity.getUrl(), entity.getService(), entity.getLastUpdate()))
+                .toList();
     }
 
     @Override
     @Transactional
     public void updateLink(long linkId, OffsetDateTime time) {
-
+        LinkEntity linkEntity = linkRepository.findById(linkId).orElse(null);
+        if (linkEntity == null) {
+            throw new LinkNotTrackedException();
+        }
+        linkEntity.setLastUpdate(OffsetDateTime.now(ZoneOffset.UTC));
+        linkRepository.save(linkEntity);
     }
 
     @Override
     @Transactional
     public List<Long> getUsersByLink(Long id) {
-        return null;
+        return userRepository.findAllByLinks_Id(id).stream()
+                .map(UserEntity::getId)
+                .toList();
     }
 
     @Override
+    @Retryable(retryFor = {StaleObjectStateException.class, ObjectOptimisticLockingFailureException.class})
     @Transactional
     public void removeLink(String url) {
-
+        linkRepository.deleteByUrl(url);
     }
 }
