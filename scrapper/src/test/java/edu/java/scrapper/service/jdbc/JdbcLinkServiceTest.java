@@ -150,7 +150,7 @@ public class JdbcLinkServiceTest extends IntegrationTest {
         userService.registerUser(0L);
         Link link = new Link("https://github.com/asdsadad");
         Long linkId = linkService.trackLink(link, 0L);
-        assertThat(linkService.isLinkTracked(link, 0L));
+        assertThat(linkService.isLinkTracked(link, 0L)).isTrue();
         assertDoesNotThrow(() -> linkService.updateLink(linkId, OffsetDateTime.now()));
         assertThat(linkService.isLinkTracked(link, 0L)).isTrue();
     }
@@ -172,5 +172,26 @@ public class JdbcLinkServiceTest extends IntegrationTest {
         Long secondId = linkService.trackLink(urls.getLast(), 0L);
         assertThat(linkService.getUsersByLink(firstId)).isEqualTo(List.of(0L, 1L));
         assertThat(linkService.getUsersByLink(secondId)).isEqualTo(List.of(0L));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    @DisplayName("Remove link when it wasn't added")
+    void removeLink_whenIsNotThere_thenSuccess() {
+        assertDoesNotThrow(() -> linkService.removeLink("https://github.com/asdsadad"));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    @DisplayName("Remove link when it was added before")
+    void removeLink_whenIsThere_thenSuccess() {
+        userService.registerUser(0L);
+        Link link = new Link("https://github.com/asdsadad");
+        linkService.trackLink(link, 0L);
+        assertThat(linkService.isLinkTracked(link, 0L)).isTrue();
+        linkService.removeLink(link.getUrl().toString());
+        assertThat(linkService.isLinkTracked(link, 0L)).isFalse();
     }
 }

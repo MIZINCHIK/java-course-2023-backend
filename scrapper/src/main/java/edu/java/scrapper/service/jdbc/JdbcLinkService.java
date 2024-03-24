@@ -2,8 +2,8 @@ package edu.java.scrapper.service.jdbc;
 
 import edu.java.model.dto.LinkResponse;
 import edu.java.model.links.Link;
-import edu.java.scrapper.domain.JdbcFollowingLinksDao;
-import edu.java.scrapper.domain.JdbcLinksDao;
+import edu.java.scrapper.domain.jdbc.JdbcFollowingLinksDao;
+import edu.java.scrapper.domain.jdbc.JdbcLinksDao;
 import edu.java.scrapper.dto.FollowingData;
 import edu.java.scrapper.dto.LinkDto;
 import edu.java.scrapper.exceptions.LinkNotTrackedException;

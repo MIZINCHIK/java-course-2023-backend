@@ -91,11 +91,12 @@ public class JooqLinkServiceTest extends IntegrationTest {
     @Test
     @Transactional
     @Rollback
-    @DisplayName("Track link when it hasn't been tracked yet")
+    @DisplayName("Track link when it has been tracked")
     void trackLinkANDisLinkTracked_whenHasBeenTracked_thenSuccess() {
         Link link = new Link("https://www.github.com/asdsad");
         userService.registerUser(0L);
         linkService.trackLink(link, 0L);
+        assertThat(linkService.isLinkTracked(link, 0L)).isTrue();
         assertDoesNotThrow(() -> linkService.trackLink(link, 0L));
         assertThat(linkService.isLinkTracked(link, 0L)).isTrue();
     }
@@ -151,6 +152,7 @@ public class JooqLinkServiceTest extends IntegrationTest {
         userService.registerUser(0L);
         Link link = new Link("https://github.com/asdsadad");
         Long linkId = linkService.trackLink(link, 0L);
+        assertThat(linkService.isLinkTracked(link, 0L)).isTrue();
         assertDoesNotThrow(() -> linkService.updateLink(linkId, OffsetDateTime.now()));
         assertThat(linkService.isLinkTracked(link, 0L)).isTrue();
     }
