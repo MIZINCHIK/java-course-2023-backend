@@ -83,10 +83,10 @@ public class JdbcLinksDaoTest extends IntegrationTest {
     @Transactional
     @Rollback
     @DisplayName("Add duplicate")
-    void add_whenDuplicates_thenException() {
+    void add_whenDuplicates_thenReturnPreviousLink() {
         Link link = new Link("https://stackoverflow.com/");
-        linksRepository.add(link);
-        assertThatThrownBy(() -> linksRepository.add(link)).isInstanceOf(DuplicateKeyException.class);
+        Long id = linksRepository.add(link);
+        assertThat(linksRepository.add(link)).isEqualTo(id);
     }
 
     @ParameterizedTest
