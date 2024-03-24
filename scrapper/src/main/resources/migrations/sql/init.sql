@@ -20,8 +20,8 @@ create table if not exists links
 
 create table if not exists following_links
 (
-    user_id    bigint,
-    link_id    bigint,
+    user_id    bigint not null,
+    link_id    bigint not null,
 
     foreign key (user_id) references users (id) on delete cascade,
     foreign key (link_id) references links (id) on delete cascade,
