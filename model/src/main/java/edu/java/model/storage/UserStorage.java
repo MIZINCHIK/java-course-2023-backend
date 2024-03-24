@@ -1,9 +1,9 @@
 package edu.java.model.storage;
 
 public interface UserStorage {
-    void registerUser(Long userId);
+    void registerUser(long userId);
 
-    boolean isUserRegistered(Long userId);
+    boolean isUserRegistered(long userId);
 
-    void deleteUser(Long userId);
+    void deleteUser(long userId);
 }
