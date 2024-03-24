@@ -8,11 +8,8 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.simple.JdbcClient;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -22,13 +19,15 @@ public class JdbcLinksDao {
     private final JdbcClient jdbcClient;
 
     public Long add(Link link) {
-        String sql = "INSERT INTO links (url, service, last_update) VALUES (:url, :service, NOW()) RETURNING id";
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcClient.sql(sql)
+        String sql = "WITH inserting AS("
+            + "INSERT INTO links (url, service, last_update) VALUES (:url, :service, NOW())"
+            + " ON CONFLICT DO NOTHING RETURNING id)"
+            + "SELECT id FROM inserting UNION SELECT id FROM links WHERE url=:url and service=:service;";
+        return jdbcClient.sql(sql)
             .param("url", link.getUrl(), Types.VARCHAR)
             .param("service", link.getDomain().name, Types.OTHER)
-            .update(keyHolder);
-        return keyHolder.getKeyAs(Long.class);
+            .query(Long.class)
+            .single();
     }
 
     public void remove(long id) {
@@ -87,12 +86,13 @@ public class JdbcLinksDao {
             .single();
     }
 
-    public long findByUrl(String url) {
+    public Long findByUrl(String url) {
         String sql = "select id from links where url = (:url)";
-        return Objects.requireNonNull(jdbcClient.sql(sql)
+        return jdbcClient.sql(sql)
             .param("url", url, Types.VARCHAR)
             .query(Long.class)
-            .single());
+            .optional()
+            .orElse(null);
     }
 
     public LinkDto update(long linkId, OffsetDateTime time) {

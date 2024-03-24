@@ -65,6 +65,7 @@ public class JdbcFollowingLinksDao {
                 rs.getLong("user_id"),
                 rs.getLong("link_id")
             ))
-            .single();
+            .optional()
+            .orElse(null);
     }
 }

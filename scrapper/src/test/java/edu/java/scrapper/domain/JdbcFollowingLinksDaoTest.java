@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -303,7 +302,7 @@ public class JdbcFollowingLinksDaoTest extends IntegrationTest {
     @Transactional
     @Rollback
     @DisplayName("Find all by ids")
-    void findByIds_whenCalled_thenCorrect() throws InterruptedException {
+    void findByIds_whenCalled_thenCorrect() {
         long userId1 = 1L;
         long userId2 = 2L;
         insertUserId(userId1);
@@ -335,7 +334,7 @@ public class JdbcFollowingLinksDaoTest extends IntegrationTest {
             .isEqualTo(followingLinks.get(3));
         assertThat(followingLinksRepository.findByIds(userId2, link3))
             .isEqualTo(followingLinks.get(4));
-        assertThatThrownBy(() -> followingLinksRepository.findByIds(userId2, link2))
-            .isInstanceOf(EmptyResultDataAccessException.class);
+        assertThat(followingLinksRepository.findByIds(userId2, link2))
+            .isNull();
     }
 }

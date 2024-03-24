@@ -84,10 +84,10 @@ public class JdbcLinksDaoTest extends IntegrationTest {
     @Transactional
     @Rollback
     @DisplayName("Add duplicate")
-    void add_whenDuplicates_thenException() {
+    void add_whenDuplicates_thenReturnPreviousLink() {
         Link link = new Link("https://stackoverflow.com/");
-        linksRepository.add(link);
-        assertThatThrownBy(() -> linksRepository.add(link)).isInstanceOf(DuplicateKeyException.class);
+        Long id = linksRepository.add(link);
+        assertThat(linksRepository.add(link)).isEqualTo(id);
     }
 
     @ParameterizedTest
@@ -304,8 +304,7 @@ public class JdbcLinksDaoTest extends IntegrationTest {
     @DisplayName("Find by id when doesn't exist")
     void findByUrl_whenDoesntExist_thenException(String url) {
         linksRepository.add(new Link(url));
-        assertThatThrownBy(() -> linksRepository.findByUrl("")).isInstanceOf(
-            EmptyResultDataAccessException.class);
+        assertThat(linksRepository.findByUrl("")).isNull();
     }
 
     @ParameterizedTest

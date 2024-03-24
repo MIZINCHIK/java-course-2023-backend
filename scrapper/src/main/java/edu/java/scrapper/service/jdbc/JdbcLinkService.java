@@ -2,8 +2,8 @@ package edu.java.scrapper.service.jdbc;
 
 import edu.java.model.dto.LinkResponse;
 import edu.java.model.links.Link;
-import edu.java.scrapper.domain.jdbc.JdbcFollowingLinksDao;
-import edu.java.scrapper.domain.jdbc.JdbcLinksDao;
+import edu.java.scrapper.domain.JdbcFollowingLinksDao;
+import edu.java.scrapper.domain.JdbcLinksDao;
 import edu.java.scrapper.dto.FollowingData;
 import edu.java.scrapper.dto.LinkDto;
 import edu.java.scrapper.exceptions.LinkNotTrackedException;
@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,19 +47,18 @@ public class JdbcLinkService implements ModifiableLinkStorage {
     @Transactional
     @Override
     public long trackLink(Link link, long userId) {
-        long linkId;
-        try {
+        Long linkId = linksDao.findByUrl(link.getUrl().toString());
+        if (linkId == null) {
             linkId = linksDao.add(link);
-        } catch (DuplicateKeyException ignored) {
-            linkId = linksDao.findByUrl(link.getUrl().toString());
         }
-        try {
-            return followingLinksDao.add(userId, linkId).linkId();
-        } catch (DuplicateKeyException ignored) {
-            return linkId;
-        } catch (DataIntegrityViolationException e) {
-            throw new UserNotRegisteredException(e);
+        if (followingLinksDao.findByIds(userId, linkId) == null) {
+            try {
+                return followingLinksDao.add(userId, linkId).linkId();
+            } catch (DataIntegrityViolationException e) {
+                throw new UserNotRegisteredException(e);
+            }
         }
+        return linkId;
     }
 
     @Transactional
@@ -79,13 +77,12 @@ public class JdbcLinkService implements ModifiableLinkStorage {
     @Transactional
     @Override
     public boolean isLinkTracked(Link link, long userId) {
-        try {
-            long linkId = linksDao.findByUrl(link.getUrl().toString());
-            followingLinksDao.findByIds(userId, linkId);
-        } catch (EmptyResultDataAccessException e) {
+        Long linkId = linksDao.findByUrl(link.getUrl().toString());
+        if (linkId == null) {
             return false;
+        } else {
+            return followingLinksDao.findByIds(userId, linkId) != null;
         }
-        return true;
     }
 
     @Override
