@@ -14,8 +14,8 @@ public class JdbcFollowingLinksDao {
     private final JdbcClient jdbcClient;
 
     public FollowingData add(long userId, long linkId) {
-        String sql =
-            "INSERT INTO following_links (user_id, link_id) VALUES (:user_id, :link_id)";
+        String sql = "INSERT INTO following_links (user_id, link_id) "
+            + "VALUES (:user_id, :link_id) ON CONFLICT DO NOTHING";
         jdbcClient.sql(sql)
             .param("user_id", userId, Types.BIGINT)
             .param("link_id", linkId, Types.BIGINT)
