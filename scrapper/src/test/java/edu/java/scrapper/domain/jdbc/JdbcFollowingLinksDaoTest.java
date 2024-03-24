@@ -1,4 +1,4 @@
-package edu.java.scrapper.domain;
+package edu.java.scrapper.domain.jdbc;
 
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.domain.jdbc.JdbcFollowingLinksDao;

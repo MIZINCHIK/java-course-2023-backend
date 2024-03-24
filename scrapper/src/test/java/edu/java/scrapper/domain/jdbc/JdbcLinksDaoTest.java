@@ -1,4 +1,4 @@
-package edu.java.scrapper.domain;
+package edu.java.scrapper.domain.jdbc;
 
 import edu.java.model.links.Link;
 import edu.java.model.links.LinkDomain;
