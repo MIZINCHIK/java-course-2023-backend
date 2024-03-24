@@ -78,15 +78,14 @@ public class JdbcFollowingLinksDaoTest extends IntegrationTest {
     @Transactional
     @Rollback
     @DisplayName("Add when it's a duplicate")
-    void add_whenIdPresentAlready_thenRollback() {
+    void add_whenIdPresentAlready_thenCorrect() {
         Long userId = ThreadLocalRandom.current().nextLong();
         Long linkId = insertIds(userId);
         jdbcClient.sql("INSERT INTO following_links (user_id, link_id) VALUES (:user_id, :link_id)")
             .param("user_id", userId, Types.BIGINT)
             .param("link_id", linkId, Types.BIGINT)
             .update();
-        assertThatThrownBy(() -> followingLinksRepository.add(userId, linkId)).isInstanceOf(
-            DuplicateKeyException.class);
+        assertThat(followingLinksRepository.add(userId, linkId)).isEqualTo(new FollowingData(userId, linkId));
     }
 
     @RepeatedTest(5)

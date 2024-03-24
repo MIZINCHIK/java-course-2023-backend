@@ -47,18 +47,12 @@ public class JdbcLinkService implements ModifiableLinkStorage {
     @Transactional
     @Override
     public long trackLink(Link link, long userId) {
-        Long linkId = linksDao.findByUrl(link.getUrl().toString());
-        if (linkId == null) {
-            linkId = linksDao.add(link);
+        Long linkId = linksDao.add(link);
+        try {
+            return followingLinksDao.add(userId, linkId).linkId();
+        } catch (DataIntegrityViolationException e) {
+            throw new UserNotRegisteredException(e);
         }
-        if (followingLinksDao.findByIds(userId, linkId) == null) {
-            try {
-                return followingLinksDao.add(userId, linkId).linkId();
-            } catch (DataIntegrityViolationException e) {
-                throw new UserNotRegisteredException(e);
-            }
-        }
-        return linkId;
     }
 
     @Transactional
