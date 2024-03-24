@@ -39,9 +39,18 @@ public class LinkUpdateServiceTest {
     public void processUpdate_whenCorrectLink_thenOk() throws Exception {
         service.processUpdate(
             new LinkUpdate(1L, new URI("https://github.com"), "sda", List.of(1L, 2L, 3L)));
-        verify(primaveraBot).message(1L, "The following URL: https://github.com with description sda has been updated");
-        verify(primaveraBot).message(2L, "The following URL: https://github.com with description sda has been updated");
-        verify(primaveraBot).message(3L, "The following URL: https://github.com with description sda has been updated");
+        verify(primaveraBot).message(1L, "The following URL has been updated: \n"
+            + "https://github.com\n"
+            + "With description: \n"
+            + "sda\n");
+        verify(primaveraBot).message(2L, "The following URL has been updated: \n"
+            + "https://github.com\n"
+            + "With description: \n"
+            + "sda\n");
+        verify(primaveraBot).message(3L, "The following URL has been updated: \n"
+            + "https://github.com\n"
+            + "With description: \n"
+            + "sda\n");
         verifyNoMoreInteractions(primaveraBot);
     }
 }

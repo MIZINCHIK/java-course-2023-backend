@@ -1,6 +1,7 @@
 package edu.java.scrapper.domain;
 
 import edu.java.scrapper.IntegrationTest;
+import edu.java.scrapper.domain.jdbc.JdbcFollowingLinksDao;
 import edu.java.scrapper.dto.FollowingData;
 import edu.java.scrapper.dto.LinkDto;
 import java.sql.Types;

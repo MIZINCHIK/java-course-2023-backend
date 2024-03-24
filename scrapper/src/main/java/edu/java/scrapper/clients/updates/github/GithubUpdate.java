@@ -1,4 +1,4 @@
-package edu.java.scrapper.clients.updates;
+package edu.java.scrapper.clients.updates.github;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;

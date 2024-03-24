@@ -228,6 +228,11 @@
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>${jacoco-maven-plugin.version}</version>
+                    <configuration>
+                        <excludes>
+                            <exclude>**/scrapper/src/main/java/edu/java/scrapper/service/jooq/**</exclude>
+                        </excludes>
+                    </configuration>
                     <executions>
                         <execution>
                             <goals>

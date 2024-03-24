@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping(value = "/tg-chat")
 public class TgChatController implements TgChatApi {
-    private final UserStorage userStorage;
+    private final UserStorage jdbcUserService;
 
     @GetMapping(value = "/{id}")
     @Override
@@ -24,7 +24,7 @@ public class TgChatController implements TgChatApi {
         @PathVariable("id")
         Long id
     ) {
-        if (userStorage.isUserRegistered(id)) {
+        if (jdbcUserService.isUserRegistered(id)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
@@ -36,10 +36,10 @@ public class TgChatController implements TgChatApi {
         @PathVariable("id")
         Long id
     ) {
-        if (userStorage.isUserRegistered(id)) {
+        if (jdbcUserService.isUserRegistered(id)) {
             throw new UserAlreadyRegisteredException();
         }
-        userStorage.registerUser(id);
+        jdbcUserService.registerUser(id);
         return ResponseEntity.ok().build();
     }
 
@@ -49,10 +49,10 @@ public class TgChatController implements TgChatApi {
         @PathVariable("id")
         Long id
     ) {
-        if (!userStorage.isUserRegistered(id)) {
+        if (!jdbcUserService.isUserRegistered(id)) {
             throw new UserNotRegisteredException();
         }
-        userStorage.deleteUser(id);
+        jdbcUserService.deleteUser(id);
         return ResponseEntity.ok().build();
     }
 }

@@ -12,4 +12,6 @@ public interface ModifiableLinkStorage extends LinkStorage {
     void updateLink(long linkId, OffsetDateTime time);
 
     List<Long> getUsersByLink(Long id);
+
+    void removeLink(String url);
 }
