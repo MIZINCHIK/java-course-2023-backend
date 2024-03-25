@@ -9,20 +9,20 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
+import org.hibernate.proxy.HibernateProxy;
 
 @Entity
 @NoArgsConstructor
@@ -32,7 +32,7 @@ import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 public class LinkEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(unique = true)
     private String url;
@@ -45,16 +45,39 @@ public class LinkEntity {
     @Column(name = "last_update")
     private OffsetDateTime lastUpdate;
 
-    @ManyToMany
-    @JoinTable(
-        name = "following_links",
-        joinColumns = @JoinColumn(name = "link_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<UserEntity> users = new ArrayList<>();
+    @ManyToMany(mappedBy = "links")
+    private Set<UserEntity> users = new HashSet<>();
 
     public LinkEntity(Link link) throws URISyntaxException {
         url = link.getUrl().toString();
         service = link.getDomain();
         lastUpdate = OffsetDateTime.now(ZoneOffset.UTC);
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        Class<?> oEffectiveClass =
+            o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+                : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy
+            ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) {
+            return false;
+        }
+        LinkEntity that = (LinkEntity) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy
+            ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode()
+            : getClass().hashCode();
     }
 }

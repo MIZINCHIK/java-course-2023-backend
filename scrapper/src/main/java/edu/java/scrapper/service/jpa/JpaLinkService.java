@@ -19,12 +19,8 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.StaleObjectStateException;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 @Service
 @RequiredArgsConstructor
@@ -49,7 +45,6 @@ public class JpaLinkService implements ModifiableLinkStorage {
     }
 
     @Override
-    @Retryable(retryFor = ObjectOptimisticLockingFailureException.class)
     @Transactional
     public long trackLink(Link link, long userId) {
         LinkEntity linkEntity = linkRepository.findByUrl(link.getUrl().toString());
@@ -65,7 +60,7 @@ public class JpaLinkService implements ModifiableLinkStorage {
             throw new UserNotRegisteredException();
         }
         if (!linkRepository.existsByIdAndUsers_Id(linkEntity.getId(), userId)) {
-            linkEntity.getUsers().add(userEntity);
+            userEntity.addLink(linkEntity);
         }
         return linkRepository.save(linkEntity).getId();
     }
@@ -77,13 +72,16 @@ public class JpaLinkService implements ModifiableLinkStorage {
         if (linkEntity == null) {
             throw new LinkNotTrackedException();
         }
-        linkEntity.getUsers().removeIf(user -> user.getId() == userId);
-        linkRepository.save(linkEntity);
+        userRepository.findById(userId).ifPresent(
+                user -> {
+                    user.removeLink(linkEntity);
+                    userRepository.save(user);
+                }
+        );
         return linkEntity.getId();
     }
 
     @Override
-    @Retryable(retryFor = {StaleObjectStateException.class, ObjectOptimisticLockingFailureException.class})
     @Transactional
     public boolean isLinkTracked(Link link, long userId) {
         LinkEntity linkEntity = linkRepository.findByUrl(link.getUrl().toString());
@@ -95,7 +93,8 @@ public class JpaLinkService implements ModifiableLinkStorage {
     public List<LinkDto> getLinksWithExpiredCheckTime(Duration expirationInterval) {
         return linkRepository.findAllByLastUpdateLessThan(OffsetDateTime.now(ZoneOffset.UTC).minus(expirationInterval))
                 .stream()
-                .map(entity -> new LinkDto(entity.getId(), entity.getUrl(), entity.getService(), entity.getLastUpdate()))
+                .map(entity ->
+                        new LinkDto(entity.getId(), entity.getUrl(), entity.getService(), entity.getLastUpdate()))
                 .toList();
     }
 
@@ -119,9 +118,11 @@ public class JpaLinkService implements ModifiableLinkStorage {
     }
 
     @Override
-    @Retryable(retryFor = {StaleObjectStateException.class, ObjectOptimisticLockingFailureException.class})
     @Transactional
     public void removeLink(String url) {
-        linkRepository.deleteByUrl(url);
+        LinkEntity link = linkRepository.findByUrl(url);
+        if (link != null) {
+            link.getUsers().forEach(user -> user.removeLink(link));
+        }
     }
 }
