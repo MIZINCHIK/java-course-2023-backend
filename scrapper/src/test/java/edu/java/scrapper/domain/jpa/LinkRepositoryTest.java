@@ -1,6 +1,7 @@
 package edu.java.scrapper.domain.jpa;
 
 import edu.java.model.links.Link;
+import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.domain.jpa.entities.LinkEntity;
 import edu.java.scrapper.domain.jpa.entities.UserEntity;
 import java.net.URISyntaxException;
@@ -28,7 +29,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
-public class LinkRepositoryTest {
+public class LinkRepositoryTest extends IntegrationTest {
     @Autowired
     UserRepository usersRepository;
     @Autowired
