@@ -136,7 +136,7 @@ public class JdbcLinksDaoTest extends IntegrationTest {
     @ParameterizedTest
     @Transactional
     @Rollback
-    @CsvSource({"GitHub", "StackOverflow"})
+    @CsvSource({"GITHUB", "STACKOVERFLOW"})
     @DisplayName("Remove by url when id is in the db")
     void remove_whenUrlFound_thenRemoved(String service) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
