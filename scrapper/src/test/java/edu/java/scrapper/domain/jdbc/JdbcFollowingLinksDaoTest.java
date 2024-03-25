@@ -64,7 +64,7 @@ public class JdbcFollowingLinksDaoTest extends IntegrationTest {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcClient.sql("INSERT INTO links (url, service, last_update) VALUES (:url, :service, NOW()) RETURNING id")
             .param("url", RandomStringUtils.random(10))
-            .param("service", ThreadLocalRandom.current().nextBoolean() ? "GitHub" : "StackOverflow", Types.OTHER)
+            .param("service", ThreadLocalRandom.current().nextBoolean() ? "GITHUB" : "STACKOVERFLOW", Types.OTHER)
             .update(keyHolder);
         return keyHolder.getKeyAs(Long.class);
     }
