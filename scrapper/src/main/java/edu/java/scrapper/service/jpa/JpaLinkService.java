@@ -71,10 +71,7 @@ public class JpaLinkService implements ModifiableLinkStorage {
             throw new LinkNotTrackedException();
         }
         userRepository.findById(userId).ifPresent(
-                user -> {
-                    user.removeLink(linkEntity);
-                    userRepository.save(user);
-                }
+                user -> user.removeLink(linkEntity)
         );
         return linkEntity.getId();
     }

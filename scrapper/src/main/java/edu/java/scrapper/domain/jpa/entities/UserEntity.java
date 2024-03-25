@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.util.HashSet;
@@ -45,6 +46,13 @@ public class UserEntity {
     public void removeLink(LinkEntity link) {
         links.remove(link);
         link.getUsers().remove(this);
+    }
+
+    @PreRemove
+    public void preRemove() {
+        for (var link : links) {
+            link.getUsers().remove(this);
+        }
     }
 
     @Override

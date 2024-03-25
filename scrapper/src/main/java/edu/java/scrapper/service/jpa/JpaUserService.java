@@ -29,6 +29,14 @@ public class JpaUserService implements UserStorage {
     @Override
     @Transactional
     public void deleteUser(long userId) {
-        userRepository.deleteById(userId);
+        var user = userRepository.findById(userId).orElse(null);
+        if (user != null) {
+            for (var link : user.getLinks()) {
+                link.getUsers().remove(user);
+            }
+            userRepository.saveAndFlush(user);
+            user.getLinks().clear();
+            userRepository.deleteById(userId);
+        }
     }
 }
