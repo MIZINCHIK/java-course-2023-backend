@@ -1,6 +1,8 @@
 package edu.java.scrapper.service.jpa;
 
 import edu.java.scrapper.IntegrationTest;
+import edu.java.scrapper.domain.jpa.LinkRepository;
+import edu.java.scrapper.domain.jpa.UserRepository;
 import edu.java.scrapper.exceptions.UserAlreadyRegisteredException;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -16,8 +18,12 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
 public class JpaUserServiceTest extends IntegrationTest {
+    private final JpaUserService userService;
+
     @Autowired
-    JpaUserService userService;
+    public JpaUserServiceTest(UserRepository userRepository) {
+        userService = new JpaUserService(userRepository);
+    }
 
     @RepeatedTest(5)
     @Transactional

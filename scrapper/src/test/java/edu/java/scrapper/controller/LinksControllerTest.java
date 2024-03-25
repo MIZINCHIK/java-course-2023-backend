@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.java.model.dto.AddLinkRequest;
 import edu.java.model.dto.LinkResponse;
 import edu.java.model.dto.RemoveLinkRequest;
-import edu.java.model.storage.LinkStorage;
 import edu.java.model.storage.UserStorage;
+import edu.java.scrapper.service.ModifiableLinkStorage;
 import java.net.URI;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +39,7 @@ public class LinksControllerTest {
     @MockBean
     private UserStorage userStorage;
     @MockBean
-    private LinkStorage linkStorage;
+    private ModifiableLinkStorage linkStorage;
 
     @Test
     @DisplayName("GET 200")

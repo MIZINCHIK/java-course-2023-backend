@@ -1,4 +1,4 @@
-create type external_service as enum ('GitHub', 'StackOverflow');
+create type external_service as enum ('GITHUB', 'STACKOVERFLOW');
 
 create table if not exists users
 (

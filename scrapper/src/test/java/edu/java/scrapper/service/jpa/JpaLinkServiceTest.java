@@ -3,6 +3,8 @@ package edu.java.scrapper.service.jpa;
 import edu.java.model.dto.LinkResponse;
 import edu.java.model.links.Link;
 import edu.java.scrapper.IntegrationTest;
+import edu.java.scrapper.domain.jpa.LinkRepository;
+import edu.java.scrapper.domain.jpa.UserRepository;
 import edu.java.scrapper.dto.LinkDto;
 import edu.java.scrapper.exceptions.LinkNotTrackedException;
 import edu.java.scrapper.exceptions.UserNotRegisteredException;
@@ -23,10 +25,14 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
 public class JpaLinkServiceTest extends IntegrationTest {
+    private final JpaLinkService linkService;
+    private final JpaUserService userService;
+
     @Autowired
-    JpaLinkService linkService;
-    @Autowired
-    JpaUserService userService;
+    public JpaLinkServiceTest(LinkRepository linkRepository, UserRepository userRepository) {
+        linkService = new JpaLinkService(linkRepository, userRepository);
+        userService = new JpaUserService(userRepository);
+    }
 
     @Test
     @Transactional

@@ -1,6 +1,7 @@
 package edu.java.scrapper.service.jdbc;
 
 import edu.java.scrapper.IntegrationTest;
+import edu.java.scrapper.domain.jdbc.JdbcUsersDao;
 import edu.java.scrapper.exceptions.UserAlreadyRegisteredException;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -16,8 +17,12 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
 public class JdbcUserServiceTest extends IntegrationTest {
+    private final JdbcUserService userService;
+
     @Autowired
-    JdbcUserService userService;
+    public JdbcUserServiceTest(JdbcUsersDao usersDao) {
+        userService = new JdbcUserService(usersDao);
+    }
 
     @RepeatedTest(5)
     @Transactional

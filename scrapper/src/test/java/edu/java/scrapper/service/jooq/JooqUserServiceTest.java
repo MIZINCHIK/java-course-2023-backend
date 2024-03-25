@@ -4,6 +4,7 @@ import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.exceptions.UserAlreadyRegisteredException;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import org.jooq.DSLContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,12 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
 public class JooqUserServiceTest extends IntegrationTest {
+    private final JooqUserService userService;
+
     @Autowired
-    JooqUserService userService;
+    public JooqUserServiceTest(DSLContext dslContext) {
+        userService = new JooqUserService(dslContext);
+    }
 
     @RepeatedTest(5)
     @Transactional

@@ -5,10 +5,8 @@ import edu.java.scrapper.domain.jpa.UserRepository;
 import edu.java.scrapper.domain.jpa.entities.UserEntity;
 import edu.java.scrapper.exceptions.UserAlreadyRegisteredException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @RequiredArgsConstructor
 public class JpaUserService implements UserStorage {
     private final UserRepository userRepository;

@@ -6,6 +6,7 @@ import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.dto.LinkDto;
 import edu.java.scrapper.exceptions.LinkNotTrackedException;
 import edu.java.scrapper.exceptions.UserNotRegisteredException;
+import org.jooq.DSLContext;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,14 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
 public class JooqLinkServiceTest extends IntegrationTest {
+    private final JooqLinkService linkService;
+    private final JooqUserService userService;
+
     @Autowired
-    JooqLinkService linkService;
-    @Autowired
-    JooqUserService userService;
+    public JooqLinkServiceTest(DSLContext dslContext) {
+        linkService = new JooqLinkService(dslContext);
+        userService = new JooqUserService(dslContext);
+    }
 
     @Test
     @Transactional

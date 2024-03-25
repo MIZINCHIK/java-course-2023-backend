@@ -45,7 +45,7 @@ public class JdbcFollowingLinksDaoTest extends IntegrationTest {
             .query((rs, rowNum) -> new edu.java.scrapper.dto.LinkDto(
                 rs.getLong("id"),
                 rs.getString("url"),
-                edu.java.model.links.LinkDomain.of(rs.getString("service")),
+                edu.java.model.links.LinkDomain.valueOf(rs.getString("service")),
                 java.time.OffsetDateTime.of(rs.getTimestamp("last_update").toLocalDateTime(), java.time.ZoneOffset.UTC)
             ))
             .list()
