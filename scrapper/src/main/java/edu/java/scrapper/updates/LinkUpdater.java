@@ -29,7 +29,7 @@ public class LinkUpdater {
     private final StackOverflowClient stackOverflowClient;
     private final GitHubClient gitHubClient;
     private final BotClient botClient;
-    private final ModifiableLinkStorage jdbcLinkService;
+    private final ModifiableLinkStorage linkService;
 
     public void checkLinks(List<LinkDto> links) {
         links.forEach(this::checkLink);
@@ -39,12 +39,12 @@ public class LinkUpdater {
         OffsetDateTime prior = OffsetDateTime.now(ZoneOffset.UTC);
         try {
             switch (linkDto.service()) {
-                case SOF -> sendUpdateStackoverflow(linkDto, prior);
+                case STACKOVERFLOW -> sendUpdateStackoverflow(linkDto, prior);
                 case GITHUB -> sendUpdateGithub(linkDto, prior);
                 case null, default -> log.error("");
             }
         } catch (MalformedUrlException ignored) {
-            jdbcLinkService.removeLink(linkDto.url());
+            linkService.removeLink(linkDto.url());
         } catch (IncorrectStackoverflowIdsParameter ignored) {
         }
     }
@@ -67,7 +67,7 @@ public class LinkUpdater {
         if (!updateLinkCheckUpDate(lastActivityDate, lastAnswerDate, prior, linkDto).isAfter(linkDto.lastUpdate())) {
             return;
         }
-        List<Long> chats = jdbcLinkService.getUsersByLink(linkDto.id());
+        List<Long> chats = linkService.getUsersByLink(linkDto.id());
         botClient.sendUpdate(
             new LinkUpdate(
                 linkDto.id(),
@@ -105,7 +105,7 @@ public class LinkUpdater {
         if (!updateLinkCheckUpDate(lastActivityDate, lastCommitDate, prior, linkDto).isAfter(linkDto.lastUpdate())) {
             return;
         }
-        List<Long> chats = jdbcLinkService.getUsersByLink(linkDto.id());
+        List<Long> chats = linkService.getUsersByLink(linkDto.id());
         botClient.sendUpdate(
             new LinkUpdate(
                 linkDto.id(),
@@ -133,7 +133,7 @@ public class LinkUpdater {
     ) {
         OffsetDateTime lastObservedEventDate =
             lastActivityDate.isAfter(lastHandledEventDate) ? lastActivityDate : lastHandledEventDate;
-        jdbcLinkService.updateLink(
+        linkService.updateLink(
             linkDto.id(),
             priorDate.isBefore(lastObservedEventDate) ? lastObservedEventDate : priorDate
         );

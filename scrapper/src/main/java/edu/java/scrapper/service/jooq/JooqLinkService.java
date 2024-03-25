@@ -20,12 +20,10 @@ import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.jooq.exception.NoDataFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import static edu.java.scrapper.domain.jooq.tables.FollowingLinks.FOLLOWING_LINKS;
 import static edu.java.scrapper.domain.jooq.tables.Links.LINKS;
 
-@Service
 @RequiredArgsConstructor
 public class JooqLinkService implements ModifiableLinkStorage {
     private final DSLContext dslContext;
@@ -55,7 +53,7 @@ public class JooqLinkService implements ModifiableLinkStorage {
         Long id;
         try {
             id = dslContext.insertInto(LINKS, LINKS.URL, LINKS.SERVICE, LINKS.LAST_UPDATE)
-                    .values(link.getUrl().toString(), ExternalService.valueOf(link.getDomain().name),
+                    .values(link.getUrl().toString(), ExternalService.valueOf(link.getDomain().name()),
                             OffsetDateTime.now(ZoneOffset.UTC))
                     .onDuplicateKeyIgnore()
                     .returningResult(LINKS.ID)
@@ -115,7 +113,7 @@ public class JooqLinkService implements ModifiableLinkStorage {
                 .map(linksRecord -> new LinkDto(
                         Objects.requireNonNull(linksRecord.getId()),
                         linksRecord.getUrl(),
-                        LinkDomain.of(linksRecord.getService().getLiteral()),
+                        LinkDomain.valueOf(linksRecord.getService().getLiteral()),
                         linksRecord.getLastUpdate()
                 ))
                 .toList();

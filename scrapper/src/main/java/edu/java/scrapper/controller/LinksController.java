@@ -6,10 +6,10 @@ import edu.java.model.dto.ListLinksResponse;
 import edu.java.model.dto.RemoveLinkRequest;
 import edu.java.model.exceptions.MalformedUrlException;
 import edu.java.model.links.Link;
-import edu.java.model.storage.LinkStorage;
 import edu.java.model.storage.UserStorage;
 import edu.java.scrapper.exceptions.LinkNotTrackedException;
 import edu.java.scrapper.exceptions.UserNotRegisteredException;
+import edu.java.scrapper.service.ModifiableLinkStorage;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,18 +24,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping(value = "/links")
 public class LinksController implements LinksApi {
-    private final UserStorage jdbcUserService;
-    private final LinkStorage jdbcLinkService;
+    private final UserStorage userService;
+    private final ModifiableLinkStorage linkService;
 
     @GetMapping
     @Override
     public ResponseEntity<ListLinksResponse> getLinks(
         Long tgChatId
     ) {
-        if (!jdbcUserService.isUserRegistered(tgChatId)) {
+        if (!userService.isUserRegistered(tgChatId)) {
             throw new UserNotRegisteredException();
         }
-        List<LinkResponse> links = jdbcLinkService.getLinksByUserId(tgChatId);
+        List<LinkResponse> links = linkService.getLinksByUserId(tgChatId);
         return new ResponseEntity<>(new ListLinksResponse(links, links.size()), HttpStatus.OK);
     }
 
@@ -45,7 +45,7 @@ public class LinksController implements LinksApi {
         Long tgChatId,
         AddLinkRequest addLinkRequest
     ) {
-        if (!jdbcUserService.isUserRegistered(tgChatId)) {
+        if (!userService.isUserRegistered(tgChatId)) {
             throw new UserNotRegisteredException();
         }
         Link link;
@@ -54,7 +54,7 @@ public class LinksController implements LinksApi {
         } catch (Exception e) {
             throw new MalformedUrlException();
         }
-        Long id = jdbcLinkService.trackLink(link, tgChatId);
+        Long id = linkService.trackLink(link, tgChatId);
         return ResponseEntity.ok(new LinkResponse(id, addLinkRequest.link()));
     }
 
@@ -64,7 +64,7 @@ public class LinksController implements LinksApi {
         Long tgChatId,
         RemoveLinkRequest removeLinkRequest
     ) {
-        if (!jdbcUserService.isUserRegistered(tgChatId)) {
+        if (!userService.isUserRegistered(tgChatId)) {
             throw new UserNotRegisteredException();
         }
         Link link;
@@ -73,10 +73,10 @@ public class LinksController implements LinksApi {
         } catch (Exception e) {
             throw new MalformedUrlException();
         }
-        if (!jdbcLinkService.isLinkTracked(link, tgChatId)) {
+        if (!linkService.isLinkTracked(link, tgChatId)) {
             throw new LinkNotTrackedException();
         }
-        Long id = jdbcLinkService.untrackLink(link, tgChatId);
+        Long id = linkService.untrackLink(link, tgChatId);
         return ResponseEntity.ok(new LinkResponse(id, removeLinkRequest.link()));
     }
 }

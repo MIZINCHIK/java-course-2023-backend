@@ -25,7 +25,7 @@ public class JdbcLinksDao {
             + "SELECT id FROM inserting UNION SELECT id FROM links WHERE url=:url and service=:service;";
         return jdbcClient.sql(sql)
             .param("url", link.getUrl(), Types.VARCHAR)
-            .param("service", link.getDomain().name, Types.OTHER)
+            .param("service", link.getDomain().name(), Types.OTHER)
             .query(Long.class)
             .single();
     }
@@ -43,7 +43,7 @@ public class JdbcLinksDao {
             .query((rs, rowNum) -> new LinkDto(
                 rs.getLong("id"),
                 rs.getString("url"),
-                LinkDomain.of(rs.getString("service")),
+                LinkDomain.valueOf(rs.getString("service")),
                 OffsetDateTime.ofInstant(rs.getTimestamp("last_update").toInstant(), ZoneOffset.UTC)
             ))
             .list();
@@ -60,7 +60,7 @@ public class JdbcLinksDao {
             .query((rs, rowNum) -> new LinkDto(
                 rs.getLong("id"),
                 rs.getString("url"),
-                LinkDomain.of(rs.getString("service")),
+                LinkDomain.valueOf(rs.getString("service")),
                 OffsetDateTime.ofInstant(rs.getTimestamp("last_update").toInstant(), ZoneOffset.UTC)
             ))
             .list();
@@ -80,7 +80,7 @@ public class JdbcLinksDao {
             .query((rs, rowNum) -> new LinkDto(
                 rs.getLong("id"),
                 rs.getString("url"),
-                LinkDomain.of(rs.getString("service")),
+                LinkDomain.valueOf(rs.getString("service")),
                 OffsetDateTime.ofInstant(rs.getTimestamp("last_update").toInstant(), ZoneOffset.UTC)
             ))
             .single();
@@ -103,7 +103,7 @@ public class JdbcLinksDao {
             .query((rs, rowNum) -> new LinkDto(
                 rs.getLong("id"),
                 rs.getString("url"),
-                LinkDomain.of(rs.getString("service")),
+                LinkDomain.valueOf(rs.getString("service")),
                 OffsetDateTime.ofInstant(rs.getTimestamp("last_update").toInstant(), ZoneOffset.UTC)
             ))
             .single();

@@ -32,7 +32,7 @@ public class BotRunner implements ApplicationRunner {
     }
 
     private void configureHandler() {
-        handler = new UpdateHandlerBuilder(new UnknownCommand(bot))
+        handler = new UpdateHandlerBuilder(new UnknownCommand(bot), userStorage)
             .addCommand(new StartCommand(bot, userStorage))
             .addCommand(new HelpCommand(bot))
             .addCommand(new TrackCommand(bot, userStorage, linkStorage))

@@ -1,9 +1,8 @@
-package edu.java.scrapper.domain;
+package edu.java.scrapper.domain.jdbc;
 
 import edu.java.model.links.Link;
 import edu.java.model.links.LinkDomain;
 import edu.java.scrapper.IntegrationTest;
-import edu.java.scrapper.domain.jdbc.JdbcLinksDao;
 import edu.java.scrapper.dto.LinkDto;
 import java.sql.Types;
 import java.time.Duration;
@@ -22,7 +21,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -45,7 +43,7 @@ public class JdbcLinksDaoTest extends IntegrationTest {
             .query((rs, rowNum) -> new LinkDto(
                 rs.getLong("id"),
                 rs.getString("url"),
-                LinkDomain.of(rs.getString("service")),
+                LinkDomain.valueOf(rs.getString("service")),
                 OffsetDateTime.of(rs.getTimestamp("last_update").toLocalDateTime(), ZoneOffset.UTC)
             ))
             .list();
@@ -106,7 +104,7 @@ public class JdbcLinksDaoTest extends IntegrationTest {
     @ParameterizedTest
     @Transactional
     @Rollback
-    @CsvSource({"GitHub", "StackOverflow"})
+    @CsvSource({"GITHUB", "STACKOVERFLOW"})
     @DisplayName("Remove by id when id is in the db")
     void remove_whenIdFound_thenRemoved(String service) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -138,7 +136,7 @@ public class JdbcLinksDaoTest extends IntegrationTest {
     @ParameterizedTest
     @Transactional
     @Rollback
-    @CsvSource({"GitHub", "StackOverflow"})
+    @CsvSource({"GITHUB", "STACKOVERFLOW"})
     @DisplayName("Remove by url when id is in the db")
     void remove_whenUrlFound_thenRemoved(String service) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -164,7 +162,7 @@ public class JdbcLinksDaoTest extends IntegrationTest {
         for (var link : links) {
             jdbcClient.sql("INSERT INTO links (url, service, last_update) VALUES (:url, :service, :last_update)")
                 .param("url", link.url(), Types.VARCHAR)
-                .param("service", link.service().name, Types.OTHER)
+                .param("service", link.service().name(), Types.OTHER)
                 .param("last_update", link.lastUpdate(), Types.TIMESTAMP_WITH_TIMEZONE)
                 .update();
         }
@@ -182,7 +180,7 @@ public class JdbcLinksDaoTest extends IntegrationTest {
                     new LinkDto(
                         1,
                         "1",
-                        LinkDomain.SOF,
+                        LinkDomain.STACKOVERFLOW,
                         OffsetDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS)
                     ),
                     new LinkDto(
@@ -194,7 +192,7 @@ public class JdbcLinksDaoTest extends IntegrationTest {
                     new LinkDto(
                         1,
                         "3",
-                        LinkDomain.SOF,
+                        LinkDomain.STACKOVERFLOW,
                         OffsetDateTime.now(ZoneOffset.UTC).plusDays(1L).truncatedTo(ChronoUnit.SECONDS)
                     )
                 )
@@ -212,44 +210,44 @@ public class JdbcLinksDaoTest extends IntegrationTest {
             new LinkDto(
                 1,
                 "asdsadsaddsa",
-                LinkDomain.SOF,
+                LinkDomain.STACKOVERFLOW,
                 OffsetDateTime.now(ZoneOffset.UTC).minusDays(16).truncatedTo(ChronoUnit.SECONDS)
             ),
             new LinkDto(
                 1,
                 "asdsa",
-                LinkDomain.SOF,
+                LinkDomain.STACKOVERFLOW,
                 OffsetDateTime.now(ZoneOffset.UTC).plusDays(1).truncatedTo(ChronoUnit.SECONDS)
             ),
             new LinkDto(
                 1,
                 "asdsadsgddsaddsa",
-                LinkDomain.SOF,
+                LinkDomain.STACKOVERFLOW,
                 OffsetDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS)
             ),
             new LinkDto(
                 1,
                 "123",
-                LinkDomain.SOF,
+                LinkDomain.STACKOVERFLOW,
                 OffsetDateTime.now(ZoneOffset.UTC).minusDays(3).truncatedTo(ChronoUnit.SECONDS)
             ),
             new LinkDto(
                 1,
                 "456",
-                LinkDomain.SOF,
+                LinkDomain.STACKOVERFLOW,
                 OffsetDateTime.now(ZoneOffset.UTC).minusDays(2).truncatedTo(ChronoUnit.SECONDS)
             ),
             new LinkDto(
                 1,
                 "789",
-                LinkDomain.SOF,
+                LinkDomain.STACKOVERFLOW,
                 OffsetDateTime.now(ZoneOffset.UTC).minusDays(1).truncatedTo(ChronoUnit.SECONDS)
             )
         );
         for (var link : links) {
             jdbcClient.sql("INSERT INTO links (url, service, last_update) VALUES (:url, :service, :last_update)")
                 .param("url", link.url(), Types.VARCHAR)
-                .param("service", link.service().name, Types.OTHER)
+                .param("service", link.service().name(), Types.OTHER)
                 .param("last_update", link.lastUpdate(), Types.TIMESTAMP_WITH_TIMEZONE)
                 .update();
         }
@@ -285,7 +283,7 @@ public class JdbcLinksDaoTest extends IntegrationTest {
         jdbcClient.sql(
                 "INSERT INTO links (url, service, last_update) VALUES (:url, :service, :last_update) returning id")
             .param("url", link.getUrl(), Types.VARCHAR)
-            .param("service", link.getDomain().name, Types.OTHER)
+            .param("service", link.getDomain().name(), Types.OTHER)
             .param("last_update", time, Types.TIMESTAMP_WITH_TIMEZONE)
             .update(keyHolder);
         Long id = keyHolder.getKeyAs(Long.class);

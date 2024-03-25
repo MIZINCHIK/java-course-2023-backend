@@ -5,10 +5,8 @@ import edu.java.scrapper.exceptions.UserAlreadyRegisteredException;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.stereotype.Service;
 import static edu.java.scrapper.domain.jooq.Tables.USERS;
 
-@Service
 @RequiredArgsConstructor
 public class JooqUserService implements UserStorage {
     private final DSLContext dslContext;

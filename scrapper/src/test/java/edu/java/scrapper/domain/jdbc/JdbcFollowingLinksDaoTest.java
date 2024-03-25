@@ -1,4 +1,4 @@
-package edu.java.scrapper.domain;
+package edu.java.scrapper.domain.jdbc;
 
 import edu.java.scrapper.IntegrationTest;
 import edu.java.scrapper.domain.jdbc.JdbcFollowingLinksDao;
@@ -45,7 +45,7 @@ public class JdbcFollowingLinksDaoTest extends IntegrationTest {
             .query((rs, rowNum) -> new edu.java.scrapper.dto.LinkDto(
                 rs.getLong("id"),
                 rs.getString("url"),
-                edu.java.model.links.LinkDomain.of(rs.getString("service")),
+                edu.java.model.links.LinkDomain.valueOf(rs.getString("service")),
                 java.time.OffsetDateTime.of(rs.getTimestamp("last_update").toLocalDateTime(), java.time.ZoneOffset.UTC)
             ))
             .list()
@@ -64,7 +64,7 @@ public class JdbcFollowingLinksDaoTest extends IntegrationTest {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcClient.sql("INSERT INTO links (url, service, last_update) VALUES (:url, :service, NOW()) RETURNING id")
             .param("url", RandomStringUtils.random(10))
-            .param("service", ThreadLocalRandom.current().nextBoolean() ? "GitHub" : "StackOverflow", Types.OTHER)
+            .param("service", ThreadLocalRandom.current().nextBoolean() ? "GITHUB" : "STACKOVERFLOW", Types.OTHER)
             .update(keyHolder);
         return keyHolder.getKeyAs(Long.class);
     }

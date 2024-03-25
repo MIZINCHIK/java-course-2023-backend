@@ -1,10 +1,9 @@
-package edu.java.scrapper.service.jdbc;
+package edu.java.scrapper.service.jpa;
 
 import edu.java.model.links.Link;
 import edu.java.scrapper.IntegrationTest;
-import edu.java.scrapper.domain.jdbc.JdbcFollowingLinksDao;
-import edu.java.scrapper.domain.jdbc.JdbcLinksDao;
-import edu.java.scrapper.domain.jdbc.JdbcUsersDao;
+import edu.java.scrapper.domain.jpa.LinkRepository;
+import edu.java.scrapper.domain.jpa.UserRepository;
 import edu.java.scrapper.exceptions.UserAlreadyRegisteredException;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -19,14 +18,14 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
-public class JdbcUserServiceTest extends IntegrationTest {
-    private final JdbcUserService userService;
-    private final JdbcLinkService linkService;
+public class JpaUserServiceTest extends IntegrationTest {
+    private final JpaUserService userService;
+    private final JpaLinkService linkService;
 
     @Autowired
-    public JdbcUserServiceTest(JdbcUsersDao usersDao, JdbcLinksDao linksDao, JdbcFollowingLinksDao followingLinksDao) {
-        userService = new JdbcUserService(usersDao);
-        linkService = new JdbcLinkService(linksDao, followingLinksDao);
+    public JpaUserServiceTest(UserRepository userRepository, LinkRepository linkRepository) {
+        userService = new JpaUserService(userRepository);
+        linkService = new JpaLinkService(linkRepository, userRepository);
     }
 
     @RepeatedTest(5)
