@@ -29,6 +29,7 @@
         <java-telegram-bot-api.version>7.0.1</java-telegram-bot-api.version>
         <markdowngenerator.version>1.3.1.1</markdowngenerator.version>
         <openapi.version>2.3.0</openapi.version>
+        <jooq.version>3.19.6</jooq.version>
 
         <!-- Tests -->
         <testcontainers.version>1.19.4</testcontainers.version>
@@ -51,6 +52,7 @@
         <module>bot</module>
         <module>scrapper</module>
         <module>model</module>
+        <module>jooq-codegen</module>
     </modules>
 
     <dependencyManagement>

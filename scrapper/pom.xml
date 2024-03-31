@@ -12,10 +12,6 @@
     <artifactId>scrapper</artifactId>
     <version>${revision}</version>
 
-    <properties>
-        <jooq.version>3.19.6</jooq.version>
-    </properties>
-
     <dependencies>
         <!-- Web -->
         <dependency>
@@ -64,24 +60,6 @@
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>
-            <version>${jooq.version}</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.jooq/jooq-codegen -->
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq-codegen-maven</artifactId>
-            <version>${jooq.version}</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.jooq/jooq-meta-extensions-liquibase -->
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq-meta-extensions-liquibase</artifactId>
-            <version>${jooq.version}</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.jooq/jooq-postgres-extensions -->
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq-postgres-extensions</artifactId>
             <version>${jooq.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
