@@ -16,12 +16,12 @@ public class WebLinkStorage implements LinkStorage {
     private final LinksClient linksClient;
 
     @Override
-    public List<LinkResponse> getLinksByUserId(Long userId) {
+    public List<LinkResponse> getLinksByUserId(long userId) {
         return linksClient.getLinks(userId).links();
     }
 
     @Override
-    public Long trackLink(Link link, Long userId) throws HttpClientErrorException {
+    public long trackLink(Link link, long userId) throws HttpClientErrorException {
         try {
             return linksClient.postLink(userId, link.getUrl().toURI()).id();
         } catch (URISyntaxException e) {
@@ -30,7 +30,7 @@ public class WebLinkStorage implements LinkStorage {
     }
 
     @Override
-    public Long untrackLink(Link link, Long userId) throws HttpClientErrorException {
+    public long untrackLink(Link link, long userId) throws HttpClientErrorException {
         try {
             return linksClient.deleteLink(userId, link.getUrl().toURI()).id();
         } catch (URISyntaxException e) {
@@ -39,7 +39,7 @@ public class WebLinkStorage implements LinkStorage {
     }
 
     @Override
-    public boolean isLinkTracked(Link link, Long userId) throws HttpClientErrorException {
+    public boolean isLinkTracked(Link link, long userId) throws HttpClientErrorException {
         return linksClient.getLinks(userId).links().stream()
             .map(LinkResponse::url)
             .anyMatch(x -> {

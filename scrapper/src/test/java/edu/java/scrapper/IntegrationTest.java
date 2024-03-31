@@ -3,8 +3,6 @@ package edu.java.scrapper;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import liquibase.Scope;
 import liquibase.UpdateSummaryEnum;
 import liquibase.command.CommandScope;
@@ -15,6 +13,8 @@ import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.DirectoryResourceAccessor;
+import org.junit.jupiter.api.BeforeAll;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.JdbcDatabaseContainer;
@@ -23,6 +23,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
+@DirtiesContext
 public abstract class IntegrationTest {
     @Container
     public static PostgreSQLContainer<?> POSTGRES;
@@ -34,19 +35,22 @@ public abstract class IntegrationTest {
             .withUsername("postgres")
             .withPassword("postgres");
         POSTGRES.start();
-
-        runMigrations(POSTGRES);
     }
 
-    private static void runMigrations(JdbcDatabaseContainer<?> c) {
+    @BeforeAll
+    public static void runMigrations() {
         try {
+            JdbcDatabaseContainer<?> c = POSTGRES;
             Connection connection = DriverManager.getConnection(c.getJdbcUrl(), c.getUsername(), c.getPassword());
             database =
                 DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
-            Path changelog = Path.of(System.getProperty("user.dir")).getParent().resolve("migrations");
-            Map<String, Object> scopedSettings = new LinkedHashMap<>();
-            scopedSettings.put(Scope.Attr.resourceAccessor.name(), new DirectoryResourceAccessor(changelog));
-            Scope.child(scopedSettings, () -> {
+            Path changelog = Path.of(System.getProperty("user.dir")).getParent()
+                .resolve("scrapper")
+                .resolve("src")
+                .resolve("main")
+                .resolve("resources")
+                .resolve("migrations");
+            Scope.child(Scope.Attr.resourceAccessor, new DirectoryResourceAccessor(changelog), () -> {
                 new CommandScope(UpdateCommandStep.COMMAND_NAME)
                     .addArgumentValue(DbUrlConnectionCommandStep.DATABASE_ARG, database)
                     .addArgumentValue(UpdateCommandStep.CHANGELOG_FILE_ARG, "master.xml")

@@ -12,12 +12,12 @@ public class WebUserStorage implements UserStorage {
     private final TgChatClient tgChatClient;
 
     @Override
-    public void registerUser(Long userId) throws HttpClientErrorException {
+    public void registerUser(long userId) throws HttpClientErrorException {
         tgChatClient.postChat(userId);
     }
 
     @Override
-    public boolean isUserRegistered(Long userId) {
+    public boolean isUserRegistered(long userId) {
         try {
             tgChatClient.getChat(userId);
         } catch (HttpClientErrorException ignored) {
@@ -27,7 +27,7 @@ public class WebUserStorage implements UserStorage {
     }
 
     @Override
-    public void deleteUser(Long userId) throws HttpClientErrorException {
+    public void deleteUser(long userId) throws HttpClientErrorException {
         tgChatClient.deleteChat(userId);
     }
 }

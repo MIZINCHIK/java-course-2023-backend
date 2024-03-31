@@ -6,4 +6,8 @@ public class UserNotRegisteredException extends IllegalStateException {
     public UserNotRegisteredException() {
         super(MESSAGE);
     }
+
+    public UserNotRegisteredException(Throwable cause) {
+        super(MESSAGE, cause);
+    }
 }

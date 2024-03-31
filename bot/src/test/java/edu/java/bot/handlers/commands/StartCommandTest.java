@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,7 +46,7 @@ public class StartCommandTest {
     @Test
     @DisplayName("User not registered")
     void handle_whenUserNotRegistered_thenSuccess() {
-        Mockito.when(userStorage.isUserRegistered(any())).thenReturn(false);
+        Mockito.when(userStorage.isUserRegistered(anyLong())).thenReturn(false);
         Command start = new StartCommand(bot, userStorage);
         start.handle(message, new String[] {"/start"});
         verify(bot).respond(any(), any(), stringCaptor.capture());
@@ -56,7 +57,7 @@ public class StartCommandTest {
     @Test
     @DisplayName("User registered")
     void handle_whenRegistered_thenFailure() {
-        Mockito.when(userStorage.isUserRegistered(any())).thenReturn(true);
+        Mockito.when(userStorage.isUserRegistered(anyLong())).thenReturn(true);
         Command start = new StartCommand(bot, userStorage);
         start.handle(message, new String[] {"/start"});
         verify(bot).respond(any(), any(), stringCaptor.capture());
