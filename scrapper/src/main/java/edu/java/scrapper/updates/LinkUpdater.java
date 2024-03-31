@@ -15,6 +15,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
@@ -32,7 +33,7 @@ public class LinkUpdater {
     private final ModifiableLinkStorage linkService;
 
     public void checkLinks(List<LinkDto> links) {
-        links.forEach(this::checkLink);
+        links.parallelStream().forEach(this::checkLink);
     }
 
     private void checkLink(LinkDto linkDto) {
