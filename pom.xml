@@ -292,9 +292,7 @@
                         <consoleOutput>true</consoleOutput>
                         <logViolationsToConsole>true</logViolationsToConsole>
                         <failsOnError>true</failsOnError>
-                        <excludes>
-                            <exclude>**/jooq-codegen/**/*</exclude>
-                        </excludes>
+                        <excludes>**/jooq-codegen/**/*</excludes>
                     </configuration>
                 </plugin>
             </plugins>
