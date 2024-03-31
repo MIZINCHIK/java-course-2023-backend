@@ -32,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(LinksController.class)
 public class LinksControllerTest {
+    private static final Integer EXHAUST = 1001;
     @Autowired
     private MockMvc mvc;
     @Autowired

@@ -30,6 +30,8 @@
         <markdowngenerator.version>1.3.1.1</markdowngenerator.version>
         <openapi.version>2.3.0</openapi.version>
         <jooq.version>3.19.6</jooq.version>
+        <bucket4j.version>8.8.0</bucket4j.version>
+        <bucket4j-starter.version>0.11.0</bucket4j-starter.version>
 
         <!-- Tests -->
         <testcontainers.version>1.19.4</testcontainers.version>
@@ -53,6 +55,7 @@
         <module>scrapper</module>
         <module>model</module>
         <module>jooq-codegen</module>
+        <module>backoff</module>
     </modules>
 
     <dependencyManagement>

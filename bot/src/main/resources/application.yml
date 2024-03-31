@@ -8,10 +8,36 @@ spring:
     time-zone: UTC
   config:
     import: optional:file:.env[.properties]
+  cache:
+    cache-names:
+      - rate-limit-buckets
+    caffeine:
+      spec: maximumSize=100000,expireAfterAccess=3600s
+
+bucket4j:
+  enabled: true
+  filters:
+    - cache-name: rate-limit-buckets
+      strategy: all
+      http-response-body: "{ \"status\": 429, \"error\": \"Too Many Requests\", \"message\": \"Лимит запросов исчерпан\" }"
+      rate-limits:
+        - cache-key: getHeader('X-Forwarded-For')
+          bandwidths:
+            - capacity: 100
+              time: 1
+              unit: minutes
+            - capacity: 50
+              time: 30
+              unit: seconds
 
 clients:
   scrapper:
     base-url: http://localhost:8080/
+    backoff:
+      type: exponential
+      min-backoff: 1s
+      max-attempts: 10
+      codes: 500
 
 server:
   port: 8090
