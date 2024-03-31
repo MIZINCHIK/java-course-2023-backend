@@ -1,7 +1,7 @@
 package edu.java.scrapper.service.jdbc;
 
 import edu.java.model.storage.UserStorage;
-import edu.java.scrapper.domain.JdbcUsersDao;
+import edu.java.scrapper.domain.jdbc.JdbcUsersDao;
 import edu.java.scrapper.exceptions.UserAlreadyRegisteredException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;

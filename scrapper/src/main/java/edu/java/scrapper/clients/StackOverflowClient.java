@@ -1,36 +1,38 @@
 package edu.java.scrapper.clients;
 
 import edu.java.model.exceptions.MalformedUrlException;
-import edu.java.scrapper.clients.updates.StackOverflowResponse;
-import edu.java.scrapper.clients.updates.StackOverflowUpdate;
+import edu.java.scrapper.clients.updates.stackoverflow.StackOverflowAnswer;
+import edu.java.scrapper.clients.updates.stackoverflow.StackOverflowUpdate;
+import edu.java.scrapper.clients.updates.stackoverflow.auxiliary.StackOverflowAnswers;
+import edu.java.scrapper.clients.updates.stackoverflow.auxiliary.StackOverflowQuestions;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.service.annotation.GetExchange;
+import static edu.java.scrapper.clients.ClientsUtils.getFirstInSingleElementList;
+import static edu.java.scrapper.clients.ClientsUtils.sendStackoverflowRequest;
 
 public interface StackOverflowClient {
-    String INCORRECT_ID = "Incorrect id";
     String SITE_PARAMETER = "stackoverflow.com";
-    Pattern PATTERN = Pattern.compile("^.*\\/stackoverflow\\.com\\/questions\\/(\\d*)\\/.*$");
 
     @GetExchange("/questions/{ids}?site=" + SITE_PARAMETER)
-    StackOverflowResponse getResponse(@PathVariable String ids);
+    StackOverflowQuestions getQuestionData(@PathVariable String ids);
+
+    @GetExchange("/questions/{ids}/answers?site=" + SITE_PARAMETER)
+    StackOverflowAnswers getAnswers(@PathVariable String ids);
 
     default StackOverflowUpdate getUpdate(String id) {
-        List<StackOverflowUpdate> updates = getResponse(id).items();
-        if (updates.size() != 1) {
-            throw new IllegalStateException(INCORRECT_ID);
-        }
-        return updates.getFirst();
+        return getFirstInSingleElementList(getQuestionData(id).items());
     }
 
-    default StackOverflowUpdate getUpdateByUrl(String url) {
-        Matcher matcher = PATTERN.matcher(url);
-        if (matcher.find()) {
-            return getUpdate(matcher.group(1));
-        } else {
-            throw new MalformedUrlException();
-        }
+    default List<StackOverflowAnswer> getAnswerList(String id) {
+        return getAnswers(id).items();
+    }
+
+    default StackOverflowUpdate getUpdateByUrl(String url) throws MalformedUrlException {
+        return sendStackoverflowRequest(url, this::getUpdate);
+    }
+
+    default List<StackOverflowAnswer> getAnswerListByUrl(String url) throws MalformedUrlException {
+        return sendStackoverflowRequest(url, this::getAnswerList);
     }
 }

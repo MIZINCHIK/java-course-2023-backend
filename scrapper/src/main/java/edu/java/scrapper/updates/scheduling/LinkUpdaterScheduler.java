@@ -18,7 +18,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 @RequiredArgsConstructor
 public class LinkUpdaterScheduler {
     private static final String STUB = "I'm scheduled \uD83C\uDF48 \uD83D\uDC04 \uD83D\uDC33";
-    private final ModifiableLinkStorage linkStorage;
+    private final ModifiableLinkStorage jdbcLinkService;
     private final LinkUpdater linkUpdater;
     @Value(value = "#{@scheduler.forceCheckDelay()}")
     private Duration expirationInterval;
@@ -26,6 +26,6 @@ public class LinkUpdaterScheduler {
     @Scheduled(fixedDelayString = "#{@scheduler.interval}")
     public void update() {
         log.info(STUB);
-        linkUpdater.checkLinks(linkStorage.getLinksWithExpiredCheckTime(expirationInterval));
+        linkUpdater.checkLinks(jdbcLinkService.getLinksWithExpiredCheckTime(expirationInterval));
     }
 }
