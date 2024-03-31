@@ -1,4 +1,4 @@
-name: Bot Build
+name: Model Build
 
 on:
   workflow_dispatch:
