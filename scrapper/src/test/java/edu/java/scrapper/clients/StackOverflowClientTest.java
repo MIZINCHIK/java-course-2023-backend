@@ -3,9 +3,12 @@ package edu.java.scrapper.clients;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import edu.java.backoff.BackoffType;
 import edu.java.scrapper.clients.updates.stackoverflow.StackOverflowAnswer;
 import edu.java.scrapper.clients.updates.stackoverflow.StackOverflowUpdate;
+import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,7 +29,11 @@ public class StackOverflowClientTest {
         wireMock.loadMappingsFrom(MAPPINGS);
         client = new ClientsConfiguration().stackOverflowClient(
             WebClient.builder(),
-            wmRuntimeInfo.getHttpBaseUrl()
+            wmRuntimeInfo.getHttpBaseUrl(),
+            BackoffType.EXPONENTIAL,
+            Duration.of(1, ChronoUnit.SECONDS),
+            10,
+            List.of()
         );
     }
 
@@ -75,8 +82,10 @@ public class StackOverflowClientTest {
         assertThat(answers.size()).isEqualTo(2);
         assertThat(answers.getFirst().creationDate()).isEqualTo(OffsetDateTime.parse("2008-08-23T13:19:45Z"));
         assertThat(answers.getLast().creationDate()).isEqualTo(OffsetDateTime.parse("2008-08-19T21:04:10Z"));
-        assertThat(answers.getFirst().owner().link().toString()).isEqualTo("https://stackoverflow.com/users/2597/tom-lokhorst");
-        assertThat(answers.getLast().owner().link().toString()).isEqualTo("https://stackoverflow.com/users/1311/pascal");
+        assertThat(answers.getFirst().owner().link().toString()).isEqualTo(
+            "https://stackoverflow.com/users/2597/tom-lokhorst");
+        assertThat(answers.getLast().owner().link()
+            .toString()).isEqualTo("https://stackoverflow.com/users/1311/pascal");
         assertThat(answers.getFirst().owner().name()).isEqualTo("Tom Lokhorst");
         assertThat(answers.getLast().owner().name()).isEqualTo("Pascal");
         assertThat(answers.getFirst().owner().userId()).isEqualTo(2597L);

@@ -3,10 +3,13 @@ package edu.java.scrapper.clients;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import edu.java.backoff.BackoffType;
 import edu.java.model.exceptions.MalformedUrlException;
 import edu.java.scrapper.clients.updates.github.Commit;
 import edu.java.scrapper.clients.updates.github.GithubUpdate;
+import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +30,11 @@ public class GitHubClientTest {
         wireMock.loadMappingsFrom(MAPPINGS);
         client = new ClientsConfiguration().gitHubClient(
             WebClient.builder(),
-            wmRuntimeInfo.getHttpBaseUrl()
+            wmRuntimeInfo.getHttpBaseUrl(),
+            BackoffType.EXPONENTIAL,
+            Duration.of(1, ChronoUnit.SECONDS),
+            10,
+            List.of()
         );
     }
 
@@ -77,8 +84,10 @@ public class GitHubClientTest {
         assertThat(commits.getLast().info().author().name()).isEqualTo("MIZINCHIK");
         assertThat(commits.getFirst().info().author().date()).isEqualTo(OffsetDateTime.parse("2024-03-17T15:48:59Z"));
         assertThat(commits.getLast().info().author().date()).isEqualTo(OffsetDateTime.parse("2024-03-11T07:57:04Z"));
-        assertThat(commits.getFirst().url().toString()).isEqualTo("https://github.com/MIZINCHIK/java-course-2023-backend/commit/211473fd13092bfb33d77f6f074e03e5995d0041");
-        assertThat(commits.getLast().url().toString()).isEqualTo("https://github.com/MIZINCHIK/java-course-2023-backend/commit/1e265c877de9ef374acec38b070a8e7cd802223a");
+        assertThat(commits.getFirst().url().toString()).isEqualTo(
+            "https://github.com/MIZINCHIK/java-course-2023-backend/commit/211473fd13092bfb33d77f6f074e03e5995d0041");
+        assertThat(commits.getLast().url().toString()).isEqualTo(
+            "https://github.com/MIZINCHIK/java-course-2023-backend/commit/1e265c877de9ef374acec38b070a8e7cd802223a");
     }
 
     @Test
@@ -98,8 +107,10 @@ public class GitHubClientTest {
         assertThat(commits.getLast().info().author().name()).isEqualTo("MIZINCHIK");
         assertThat(commits.getFirst().info().author().date()).isEqualTo(OffsetDateTime.parse("2024-03-17T15:48:59Z"));
         assertThat(commits.getLast().info().author().date()).isEqualTo(OffsetDateTime.parse("2024-03-11T07:57:04Z"));
-        assertThat(commits.getFirst().url().toString()).isEqualTo("https://github.com/MIZINCHIK/java-course-2023-backend/commit/211473fd13092bfb33d77f6f074e03e5995d0041");
-        assertThat(commits.getLast().url().toString()).isEqualTo("https://github.com/MIZINCHIK/java-course-2023-backend/commit/1e265c877de9ef374acec38b070a8e7cd802223a");
+        assertThat(commits.getFirst().url().toString()).isEqualTo(
+            "https://github.com/MIZINCHIK/java-course-2023-backend/commit/211473fd13092bfb33d77f6f074e03e5995d0041");
+        assertThat(commits.getLast().url().toString()).isEqualTo(
+            "https://github.com/MIZINCHIK/java-course-2023-backend/commit/1e265c877de9ef374acec38b070a8e7cd802223a");
     }
 
     @Test
