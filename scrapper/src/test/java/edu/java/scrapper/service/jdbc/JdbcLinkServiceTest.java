@@ -3,6 +3,9 @@ package edu.java.scrapper.service.jdbc;
 import edu.java.model.dto.LinkResponse;
 import edu.java.model.links.Link;
 import edu.java.scrapper.IntegrationTest;
+import edu.java.scrapper.domain.jdbc.JdbcFollowingLinksDao;
+import edu.java.scrapper.domain.jdbc.JdbcLinksDao;
+import edu.java.scrapper.domain.jdbc.JdbcUsersDao;
 import edu.java.scrapper.dto.LinkDto;
 import edu.java.scrapper.exceptions.LinkNotTrackedException;
 import edu.java.scrapper.exceptions.UserNotRegisteredException;
@@ -23,10 +26,17 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
 public class JdbcLinkServiceTest extends IntegrationTest {
+    private final JdbcLinkService linkService;
+    private final JdbcUserService userService;
+
     @Autowired
-    JdbcLinkService linkService;
-    @Autowired
-    JdbcUserService userService;
+    public JdbcLinkServiceTest(JdbcLinksDao jdbcLinksDao,
+        JdbcFollowingLinksDao jdbcFollowingLinksDao,
+        JdbcUsersDao jdbcUsersDao
+        ) {
+        linkService = new JdbcLinkService(jdbcLinksDao, jdbcFollowingLinksDao);
+        userService = new JdbcUserService(jdbcUsersDao);
+    }
 
     @Test
     @Transactional

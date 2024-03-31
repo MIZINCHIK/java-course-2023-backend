@@ -91,16 +91,16 @@ public class ListCommandTest {
         assertThat(value.indexOf("GITHUB")).isGreaterThan(-1);
         assertThat(value.indexOf("https://github.com")).isGreaterThan(value.indexOf("GITHUB"));
         value = value.substring(value.indexOf("https://github.com"));
-        assertThat(value.indexOf("SOF")).isGreaterThan(value.indexOf("https://github.com"));
-        value = value.substring(value.indexOf("SOF"));
-        assertThat(value.indexOf("https://stackoverflow.com")).isGreaterThan(value.indexOf("SOF"));
+        assertThat(value.indexOf("STACKOVERFLOW")).isGreaterThan(value.indexOf("https://github.com"));
+        value = value.substring(value.indexOf("STACKOVERFLOW"));
+        assertThat(value.indexOf("https://stackoverflow.com")).isGreaterThan(value.indexOf("STACKOVERFLOW"));
         value = value.substring(value.indexOf("https://stackoverflow.com"));
         assertThat(value.indexOf("GITHUB")).isGreaterThan(value.indexOf("https://stackoverflow.com"));
         value = value.substring(value.indexOf("GITHUB"));
         assertThat(value.indexOf("https://github.com/232132131")).isGreaterThan(value.indexOf("GITHUB"));
         value = value.substring(value.indexOf("https://github.com/232132131"));
-        assertThat(value.indexOf("SOF ")).isGreaterThan(value.indexOf("https://github.com/232132131"));
-        value = value.substring(value.indexOf("SOF"));
-        assertThat(value.indexOf("https://stackoverflow.com/21312/12321")).isGreaterThan(value.indexOf("SOF"));
+        assertThat(value.indexOf("STACKOVERFLOW ")).isGreaterThan(value.indexOf("https://github.com/232132131"));
+        value = value.substring(value.indexOf("STACKOVERFLOW"));
+        assertThat(value.indexOf("https://stackoverflow.com/21312/12321")).isGreaterThan(value.indexOf("STACKOVERFLOW"));
     }
 }

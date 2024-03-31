@@ -26,9 +26,9 @@ import org.jooq.Schema;
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public enum ExternalService implements EnumType {
 
-    GitHub("GitHub"),
+    GITHUB("GITHUB"),
 
-    StackOverflow("StackOverflow");
+    STACKOVERFLOW("STACKOVERFLOW");
 
     private final String literal;
 

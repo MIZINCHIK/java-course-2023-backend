@@ -5,9 +5,7 @@ import edu.java.scrapper.domain.jdbc.JdbcUsersDao;
 import edu.java.scrapper.exceptions.UserAlreadyRegisteredException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class JdbcUserService implements UserStorage {
     private final JdbcUsersDao usersDao;

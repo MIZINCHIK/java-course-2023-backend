@@ -1,38 +1,37 @@
-package edu.java.scrapper.service.jooq;
+package edu.java.scrapper.service.jpa;
 
 import edu.java.model.dto.LinkResponse;
 import edu.java.model.links.Link;
 import edu.java.scrapper.IntegrationTest;
+import edu.java.scrapper.domain.jpa.LinkRepository;
+import edu.java.scrapper.domain.jpa.UserRepository;
 import edu.java.scrapper.dto.LinkDto;
 import edu.java.scrapper.exceptions.LinkNotTrackedException;
 import edu.java.scrapper.exceptions.UserNotRegisteredException;
-import org.jooq.DSLContext;
+import java.net.URISyntaxException;
+import java.time.Duration;
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.net.URISyntaxException;
-import java.time.Duration;
-import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
-public class JooqLinkServiceTest extends IntegrationTest {
-    private final JooqLinkService linkService;
-    private final JooqUserService userService;
+public class JpaLinkServiceTest extends IntegrationTest {
+    private final JpaLinkService linkService;
+    private final JpaUserService userService;
 
     @Autowired
-    public JooqLinkServiceTest(DSLContext dslContext) {
-        linkService = new JooqLinkService(dslContext);
-        userService = new JooqUserService(dslContext);
+    public JpaLinkServiceTest(LinkRepository linkRepository, UserRepository userRepository) {
+        linkService = new JpaLinkService(linkRepository, userRepository);
+        userService = new JpaUserService(userRepository);
     }
 
     @Test
