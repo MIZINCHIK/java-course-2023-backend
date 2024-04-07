@@ -4,7 +4,7 @@ app:
     interval: 10s
     force-check-delay: 10s
   database-access-type: jpa
-  use-queue: true
+  use-queue: false
   kafka:
     topics:
       updates:
