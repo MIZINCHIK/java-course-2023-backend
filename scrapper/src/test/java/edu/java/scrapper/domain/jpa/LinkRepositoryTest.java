@@ -28,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-@SpringBootTest
 public class LinkRepositoryTest extends IntegrationTest {
     @Autowired
     UserRepository usersRepository;
