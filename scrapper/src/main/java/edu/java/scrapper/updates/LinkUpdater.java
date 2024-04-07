@@ -2,7 +2,6 @@ package edu.java.scrapper.updates;
 
 import edu.java.model.dto.LinkUpdate;
 import edu.java.model.exceptions.MalformedUrlException;
-import edu.java.scrapper.clients.BotClient;
 import edu.java.scrapper.clients.GitHubClient;
 import edu.java.scrapper.clients.StackOverflowClient;
 import edu.java.scrapper.clients.updates.github.Commit;
@@ -10,6 +9,7 @@ import edu.java.scrapper.clients.updates.stackoverflow.StackOverflowAnswer;
 import edu.java.scrapper.dto.LinkDto;
 import edu.java.scrapper.exceptions.IncorrectStackoverflowIdsParameter;
 import edu.java.scrapper.service.ModifiableLinkStorage;
+import edu.java.scrapper.updates.sending.UpdateSender;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -28,8 +28,8 @@ import static edu.java.scrapper.updates.UpdateDescriptionFormatter.formatNewUpda
 public class LinkUpdater {
     private final StackOverflowClient stackOverflowClient;
     private final GitHubClient gitHubClient;
-    private final BotClient botClient;
     private final ModifiableLinkStorage linkService;
+    private final UpdateSender updateSender;
 
     public void checkLinks(List<LinkDto> links) {
         links.parallelStream().forEach(this::checkLink);
@@ -68,15 +68,14 @@ public class LinkUpdater {
             return;
         }
         List<Long> chats = linkService.getUsersByLink(linkDto.id());
-        botClient.sendUpdate(
-            new LinkUpdate(
-                linkDto.id(),
-                uri,
-                formatNewUpdateMessage(lastActivityDate),
-                chats
-            ));
+        updateSender.sendUpdate(new LinkUpdate(
+            linkDto.id(),
+            uri,
+            formatNewUpdateMessage(lastActivityDate),
+            chats
+        ));
         for (StackOverflowAnswer answer : relevantAnswers) {
-            botClient.sendUpdate(
+            updateSender.sendUpdate(
                 new LinkUpdate(
                     linkDto.id(),
                     uri,
@@ -106,15 +105,16 @@ public class LinkUpdater {
             return;
         }
         List<Long> chats = linkService.getUsersByLink(linkDto.id());
-        botClient.sendUpdate(
+        updateSender.sendUpdate(
             new LinkUpdate(
                 linkDto.id(),
                 uri,
                 formatNewUpdateMessage(lastActivityDate),
                 chats
-            ));
+            )
+        );
         for (Commit commit : commits) {
-            botClient.sendUpdate(
+            updateSender.sendUpdate(
                 new LinkUpdate(
                     linkDto.id(),
                     uri,
