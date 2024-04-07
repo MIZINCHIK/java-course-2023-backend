@@ -1,5 +1,6 @@
 package edu.java.scrapper.configuration;
 
+import edu.java.model.kafka.TopicConfiguration;
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -14,7 +15,12 @@ public record ApplicationConfig(
     Scheduler scheduler,
     @NotNull
     @Bean
-    AccessType databaseAccessType
+    AccessType databaseAccessType,
+    @Bean
+    boolean useQueue,
+    @NotNull
+    @Bean
+    Kafka kafka
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
@@ -22,4 +28,8 @@ public record ApplicationConfig(
     public enum AccessType {
         JDBC, JPA, JOOQ
     }
+
+    public record Kafka(Topics topics) {}
+
+    public record Topics(TopicConfiguration updates) {}
 }
