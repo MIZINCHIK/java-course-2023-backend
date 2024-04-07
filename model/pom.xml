@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>model</artifactId>
+    <version>${revision}</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -27,7 +28,58 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>${protobuf.version}</version>
+        </dependency>
+        <!-- Kafka -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
     </dependencies>
 
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
 
+        <plugins>
+            <plugin>
+                <groupId>org.xolstice.maven.plugins</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>0.6.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>compile-custom</goal>
+                        </goals>
+                        <configuration>
+                            <protoSourceRoot>${basedir}/src/main/resources/protobuf</protoSourceRoot>
+                            <protocArtifact>
+                                com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}
+                            </protocArtifact>
+                            <pluginId>proto-java</pluginId>
+                            <pluginArtifact>
+                                io.grpc:protoc-gen-grpc-java:1.4.0:exe:${os.detected.classifier}
+                            </pluginArtifact>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.7.0</version>
+            </extension>
+        </extensions>
+    </build>
 </project>
