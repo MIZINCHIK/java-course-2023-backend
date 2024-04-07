@@ -4,7 +4,7 @@ app:
     interval: 10s
     force-check-delay: 10s
   database-access-type: jpa
-  use-queue: true
+  use-queue: false
   kafka:
     topics:
       updates:
@@ -38,8 +38,6 @@ clients:
 spring:
   kafka:
     bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
-    admin:
-      auto-create: false
   application:
     name: scrapper
   liquibase:
