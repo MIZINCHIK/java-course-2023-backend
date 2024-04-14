@@ -33,6 +33,8 @@
         <jooq.version>3.19.6</jooq.version>
         <bucket4j.version>8.8.0</bucket4j.version>
         <bucket4j-starter.version>0.11.0</bucket4j-starter.version>
+        <prometheus.version>1.12.5</prometheus.version>
+        <tracing.version>1.2.5</tracing.version>
 
         <!-- Tests -->
         <testcontainers.version>1.19.4</testcontainers.version>
