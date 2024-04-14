@@ -3,6 +3,10 @@ package edu.java.scrapper;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import edu.java.scrapper.kafka_properties.KafkaBeans;
+import edu.java.scrapper.updates.LinkUpdater;
+import edu.java.scrapper.updates.scheduling.LinkUpdaterScheduler;
+import edu.java.scrapper.updates.sending.KafkaUpdateSender;
 import liquibase.Scope;
 import liquibase.UpdateSummaryEnum;
 import liquibase.command.CommandScope;
@@ -14,6 +18,7 @@ import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.DirectoryResourceAccessor;
 import org.junit.jupiter.api.BeforeAll;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -28,6 +33,14 @@ public abstract class IntegrationTest {
     @Container
     public static PostgreSQLContainer<?> POSTGRES;
     public static Database database;
+    @MockBean
+    KafkaBeans exludeKafka;
+    @MockBean
+    LinkUpdater excludeUpdater;
+    @MockBean
+    LinkUpdaterScheduler excludeScheduling;
+    @MockBean
+    KafkaUpdateSender exludeKafkaUpdateSender;
 
     static {
         POSTGRES = new PostgreSQLContainer<>("postgres:15")

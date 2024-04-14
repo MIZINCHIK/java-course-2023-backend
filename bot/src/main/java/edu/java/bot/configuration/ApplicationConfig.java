@@ -1,7 +1,6 @@
 package edu.java.bot.configuration;
 
 import edu.java.bot.PrimaveraBot;
-import edu.java.model.kafka.TopicConfiguration;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -14,10 +13,7 @@ public record ApplicationConfig(
     @NotEmpty
     String telegramToken,
     @NotNull
-    ScrapperTopic scrapperTopic,
-    @NotNull
-    @Bean
-    Kafka kafka
+    ScrapperTopic scrapperTopic
 ) {
     @Bean
     PrimaveraBot getBot() {
@@ -26,14 +22,4 @@ public record ApplicationConfig(
 
     public record ScrapperTopic(@NotEmpty String name) {
     }
-
-    public record Kafka(
-        @NotEmpty
-        String bootstrapServers,
-        @NotNull
-        Topics topics
-    ) {
-    }
-
-    public record Topics(TopicConfiguration updates, TopicConfiguration dlq){}
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@ConditionalOnProperty(prefix = "app", name = "use-queue", havingValue = "false")
+@ConditionalOnProperty(prefix = "spring.kafka", name = "use-queue", havingValue = "false")
 public class HttpUpdateSender implements UpdateSender {
     private final BotClient botClient;
 

@@ -2,6 +2,8 @@ app:
   telegram-token: ${TELEGRAM_TOKEN:unset}
   scrapper-topic:
     name: updates
+
+spring:
   kafka:
     bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
     topics:
@@ -11,8 +13,7 @@ app:
         name: updates_dlq
         replicas: 10
         partitions: 1
-
-spring:
+    use-queue: false
   application:
     name: bot
   jackson:

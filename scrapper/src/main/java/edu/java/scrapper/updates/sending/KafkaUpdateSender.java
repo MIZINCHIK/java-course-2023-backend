@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@ConditionalOnProperty(prefix = "app", name = "use-queue", havingValue = "true")
+@ConditionalOnProperty(prefix = "spring.kafka", name = "use-queue", havingValue = "true")
 public class KafkaUpdateSender implements UpdateSender {
     private final KafkaTemplate<String, LinkUpdate> kafkaTemplate;
     private final KafkaTemplate<String, String> badTemplate;
