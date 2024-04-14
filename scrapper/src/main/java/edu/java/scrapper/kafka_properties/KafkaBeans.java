@@ -5,7 +5,6 @@ import edu.java.model.kafka.TopicConfiguration;
 import edu.java.model.kafka.serdes.UpdateSerializer;
 import java.util.HashMap;
 import java.util.Map;
-import edu.java.scrapper.updates.sending.UpdateSender;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -19,7 +18,6 @@ import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Component
 @ConditionalOnProperty(prefix = "spring.kafka", name = "use-queue", havingValue = "true")
