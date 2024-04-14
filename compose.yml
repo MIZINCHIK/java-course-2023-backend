@@ -105,6 +105,32 @@ services:
     volumes:
       - broker3:/var/lib/kafka/data:rw
 
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prom_data:/prometheus
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  grafana:
+    image: grafana/grafana-oss
+    container_name: grafana
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=grafana
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/datasources
+
 volumes:
   zoo_data: {}
   zoo_log: {}
@@ -112,6 +138,7 @@ volumes:
   broker2: {}
   broker3: {}
   postgresql: {}
+  prom_data: {}
   liquibase:
     driver: local
     driver_opts:
@@ -120,4 +147,4 @@ volumes:
       device: './scrapper/src/main/resources/migrations'
 
 networks:
-  backend: { }
+  backend: {}
