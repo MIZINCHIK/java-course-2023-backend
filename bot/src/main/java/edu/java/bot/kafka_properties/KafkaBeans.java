@@ -36,6 +36,7 @@ import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 @ConditionalOnProperty(prefix = "spring.kafka", name = "use-queue", havingValue = "true")
 public class KafkaBeans {
     private final LinkUpdateService service;
+    private final MessageCountMetric countMetric;
     @Value("#{kafkaConfiguration.bootstrapServers}")
     private String bootstrapServers;
     @Value("#{kafkaConfiguration.topics.updates()}")
@@ -73,6 +74,7 @@ public class KafkaBeans {
     public void listen(LinkUpdate update) {
         service.processUpdate(update);
         log.info("Update processed: {}", update);
+        countMetric.increment();
     }
 
     @Bean
