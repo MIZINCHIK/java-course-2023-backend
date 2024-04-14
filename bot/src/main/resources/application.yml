@@ -13,7 +13,7 @@ spring:
         name: updates_dlq
         replicas: 10
         partitions: 1
-    use-queue: false
+    use-queue: true
   application:
     name: bot
   jackson:
@@ -60,3 +60,17 @@ logging:
 springdoc:
   swagger-ui:
     path: /swagger-ui
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "info,health,prometheus"
+      base-path: "/"
+      path-mapping:
+        prometheus: metrics
+  server:
+    port: 40477
+  metrics:
+    tags:
+      application: ${spring.application.name}

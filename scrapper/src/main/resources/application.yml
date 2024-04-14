@@ -81,3 +81,17 @@ logging:
 springdoc:
   swagger-ui:
     path: /swagger-ui
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "info,health,prometheus"
+      base-path: "/"
+      path-mapping:
+        prometheus: metrics
+  server:
+    port: 40476
+  metrics:
+    tags:
+      application: ${spring.application.name}
