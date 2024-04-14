@@ -55,14 +55,14 @@ public class KafkaBeans {
         return new KafkaTemplate<>(producerFactory());
     }
 
-    @Bean
-    public KafkaTemplate<String, String> badTemplate() {
-        return new KafkaTemplate<>(
-            new DefaultKafkaProducerFactory<>(Map.of(
-                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress,
-                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class,
-                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class
-            ))
-        );
-    }
+//    @Bean
+//    public KafkaTemplate<String, String> badTemplate() {
+//        return new KafkaTemplate<>(
+//            new DefaultKafkaProducerFactory<>(Map.of(
+//                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress,
+//                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class,
+//                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class
+//            ))
+//        );
+//    }
 }
