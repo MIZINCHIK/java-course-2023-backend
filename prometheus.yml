@@ -25,9 +25,5 @@ scrape_configs:
 
     static_configs:
       - targets: ['host.docker.internal:40476']
-        labels:
-          application: 'scrapper'
 
       - targets: ['host.docker.internal:40477']
-        labels:
-          application: 'bot'
