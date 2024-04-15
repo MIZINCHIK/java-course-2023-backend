@@ -28,6 +28,6 @@ scrape_configs:
         labels:
           application: 'scrapper'
 
-      - targets: ['host.docker.internal:40477', 'host.docker.internal:40478']
+      - targets: ['host.docker.internal:40477']
         labels:
           application: 'bot'
