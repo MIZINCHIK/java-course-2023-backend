@@ -27,7 +27,7 @@ jobs:
         run: mvn -pl bot -am package
 
       - name: docker build
-        run: docker build --tag=bot:latest .
+        run: docker build --tag=bot:latest bot/.
 
       - id: jacoco
         uses: madrapps/jacoco-report@v1.6.1
