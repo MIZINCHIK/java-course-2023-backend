@@ -17,23 +17,22 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-@SpringBootTest
 public class JdbcLinkServiceTest extends IntegrationTest {
     private final JdbcLinkService linkService;
     private final JdbcUserService userService;
 
     @Autowired
-    public JdbcLinkServiceTest(JdbcLinksDao jdbcLinksDao,
+    public JdbcLinkServiceTest(
+        JdbcLinksDao jdbcLinksDao,
         JdbcFollowingLinksDao jdbcFollowingLinksDao,
         JdbcUsersDao jdbcUsersDao
-        ) {
+    ) {
         linkService = new JdbcLinkService(jdbcLinksDao, jdbcFollowingLinksDao);
         userService = new JdbcUserService(jdbcUsersDao);
     }
