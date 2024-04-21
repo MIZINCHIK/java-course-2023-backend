@@ -30,8 +30,8 @@ jobs:
       - name: maven build
         run: mvn -pl bot -am package
 
-      - name: docker build
-        run: docker build --tag=bot:latest bot/.
+#      - name: docker build
+#        run: docker build --tag=bot:latest bot/.
 
       - name: Log in to the Container registry
         uses: docker/login-action@v3
@@ -49,7 +49,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
-          context: .
+          context: bot/.
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
