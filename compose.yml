@@ -11,6 +11,7 @@ services:
       - postgresql:/var/lib/postgresql/data
     networks:
       - backend
+
   liquibase-migrations:
     image: liquibase/liquibase:4.25
     depends_on:
@@ -41,6 +42,8 @@ services:
     volumes:
       - zoo_data:/var/lib/zookeeper/data:rw
       - zoo_log:/var/lib/zookeeper/log:rw
+#    networks:
+#      - backend
 
   kafka1:
     image: confluentinc/cp-kafka:7.3.2
@@ -62,6 +65,8 @@ services:
       - zoo1
     volumes:
       - broker1:/var/lib/kafka/data:rw
+#    networks:
+#      - backend
 
   kafka2:
     image: confluentinc/cp-kafka:7.3.2
@@ -83,6 +88,8 @@ services:
       - zoo1
     volumes:
       - broker2:/var/lib/kafka/data:rw
+#    networks:
+#      - backend
 
   kafka3:
     image: confluentinc/cp-kafka:7.3.2
@@ -104,6 +111,8 @@ services:
       - zoo1
     volumes:
       - broker3:/var/lib/kafka/data:rw
+#    networks:
+#      - backend
 
   prometheus:
     image: prom/prometheus
@@ -131,6 +140,41 @@ services:
     volumes:
       - ./grafana:/etc/grafana/provisioning/datasources
 
+  bot:
+    image: ghcr.io/mizinchik/java-course-2023-backend/bot:pr-12
+    container_name: bot
+    environment:
+#      - APP_TELEGRAM_TOKEN_FILE=/run/secrets/tg_api_key
+#      - SPRING_KAFKA_BOOTSTRAP-SERVERS=http://kafka1:9092,http://kafka2:9093,http://kafka3:9094
+      - SPRING_KAFKA_USE-QUEUE=false
+      - SERVER_PORT=8090
+      - CLIENTS_SCRAPPER_BASE-URL=http://scrapper:8080/
+      - MANAGEMENT_SERVER_PORT=40477
+    ports:
+      - 8090:8090
+    networks:
+      - backend
+    secrets:
+      - tg_api_key
+
+  scrapper:
+    image: ghcr.io/mizinchik/java-course-2023-backend/scrapper:pr-12
+    container_name: scrapper
+    depends_on:
+      - postgresql
+      - liquibase-migrations
+    environment:
+      - CLIENTS_BOT_BASE-URL=http://bot:8090/
+#      - SPRING_KAFKA_BOOTSTRAP-SERVERS=http://kafka1:9092,http://kafka2:9093,http://kafka3:9094
+      - SPRING_KAFKA_USE-QUEUE=false
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/scrapper
+      - SERVER_PORT=8080
+      - MANAGEMENT_SERVER_PORT=40476
+    ports:
+      - 8080:8080
+    networks:
+      - backend
+
 volumes:
   zoo_data: {}
   zoo_log: {}
@@ -148,3 +192,7 @@ volumes:
 
 networks:
   backend: {}
+
+secrets:
+  tg_api_key:
+    file: tg_api_key.txt
