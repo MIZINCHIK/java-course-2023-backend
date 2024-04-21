@@ -3,6 +3,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 *.env
+tg_api_key.txt
 
 ### STS ###
 .apt_generated
