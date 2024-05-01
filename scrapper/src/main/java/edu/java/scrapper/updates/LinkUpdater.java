@@ -32,7 +32,7 @@ public class LinkUpdater {
     private final ModifiableLinkStorage linkService;
 
     public void checkLinks(List<LinkDto> links) {
-        links.forEach(this::checkLink);
+        links.parallelStream().forEach(this::checkLink);
     }
 
     private void checkLink(LinkDto linkDto) {

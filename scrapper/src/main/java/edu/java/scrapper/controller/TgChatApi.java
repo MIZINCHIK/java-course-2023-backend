@@ -16,7 +16,8 @@ public interface TgChatApi {
                        @Content(mediaType = "application/json",
                                 schema = @Schema(implementation = ApiErrorResponse.class))
                    }),
-                   @ApiResponse(responseCode = "404", description = "Чат не отслеживается")})
+                   @ApiResponse(responseCode = "404", description = "Чат не отслеживается"),
+                   @ApiResponse(responseCode = "429", description = "Лимит запросов исчерпан")})
     ResponseEntity<Void> getChat(
         @NotNull
         Long id
@@ -32,7 +33,8 @@ public interface TgChatApi {
                    @ApiResponse(responseCode = "409", description = "Чат уже зарегистрирован", content = {
                        @Content(mediaType = "application/json",
                                 schema = @Schema(implementation = ApiErrorResponse.class))
-                   })})
+                   }),
+                   @ApiResponse(responseCode = "429", description = "Лимит запросов исчерпан")})
     ResponseEntity<Void> registerChat(
         @NotNull
         Long id
@@ -48,7 +50,8 @@ public interface TgChatApi {
                    @ApiResponse(responseCode = "404", description = "Чат не существует", content = {
                        @Content(mediaType = "application/json",
                                 schema = @Schema(implementation = ApiErrorResponse.class))
-                   })
+                   }),
+                   @ApiResponse(responseCode = "429", description = "Лимит запросов исчерпан")
                })
     ResponseEntity<Void> deleteChat(
         @NotNull

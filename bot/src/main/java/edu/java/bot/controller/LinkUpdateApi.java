@@ -17,7 +17,8 @@ public interface LinkUpdateApi {
         @ApiResponse(responseCode = "200", description = "Обновление обработано"),
         @ApiResponse(responseCode = "400", description = "Некорректные параметры запроса",
                      content = {@Content(mediaType = "application/json",
-                                         schema = @Schema(implementation = ApiErrorResponse.class))})})
+                                         schema = @Schema(implementation = ApiErrorResponse.class))}),
+        @ApiResponse(responseCode = "429", description = "Лимит запросов исчерпан")})
     ResponseEntity<?> sendUpdate(
         @Valid @RequestBody LinkUpdate update
     );

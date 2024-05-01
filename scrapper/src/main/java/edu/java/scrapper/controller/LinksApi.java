@@ -28,7 +28,8 @@ public interface LinksApi {
                    @ApiResponse(responseCode = "404", description = "Юзер не зарегистрирован", content = {
                        @Content(mediaType = "application/json",
                                 schema = @Schema(implementation = ApiErrorResponse.class))
-                   })})
+                   }),
+                   @ApiResponse(responseCode = "429", description = "Лимит запросов исчерпан")})
     ResponseEntity<ListLinksResponse> getLinks(
         @NotNull
         @RequestHeader(value = "Tg-Chat-Id")
@@ -47,7 +48,8 @@ public interface LinksApi {
                    @ApiResponse(responseCode = "404", description = "Юзер не зарегистрирован", content = {
                        @Content(mediaType = "application/json",
                                 schema = @Schema(implementation = ApiErrorResponse.class))
-                   })})
+                   }),
+                   @ApiResponse(responseCode = "429", description = "Лимит запросов исчерпан")})
     ResponseEntity<LinkResponse> postLink(
         @NotNull
         @RequestHeader(value = "Tg-Chat-Id")
@@ -70,7 +72,8 @@ public interface LinksApi {
                                 content = {
                                     @Content(mediaType = "application/json",
                                              schema = @Schema(implementation = ApiErrorResponse.class))
-                                })})
+                                }),
+                   @ApiResponse(responseCode = "429", description = "Лимит запросов исчерпан")})
     ResponseEntity<LinkResponse> deleteLink(
         @NotNull
         @RequestHeader(value = "Tg-Chat-Id")

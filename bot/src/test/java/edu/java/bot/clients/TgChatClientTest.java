@@ -3,6 +3,10 @@ package edu.java.bot.clients;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import edu.java.backoff.BackoffType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +26,11 @@ public class TgChatClientTest {
         wireMock.loadMappingsFrom(MAPPINGS);
         client = new ClientsConfiguration().tgChatClient(
             WebClient.builder(),
-            wmRuntimeInfo.getHttpBaseUrl()
+            wmRuntimeInfo.getHttpBaseUrl(),
+            BackoffType.LINEAR,
+            Duration.of(1, ChronoUnit.SECONDS),
+            5,
+            List.of()
         );
     }
 
@@ -63,7 +71,7 @@ public class TgChatClientTest {
     @Test
     @DisplayName("DELETE 400")
     void deleteChat_when400_thenException() {
-        assertThatThrownBy(() -> client.postChat(1L))
+        assertThatThrownBy(() -> client.deleteChat(1L))
             .isInstanceOf(HttpClientErrorException.class)
             .hasMessage("400 Tg chat client encountered and error");
     }

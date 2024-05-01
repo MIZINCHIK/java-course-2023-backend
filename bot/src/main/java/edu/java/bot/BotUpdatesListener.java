@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.handlers.UpdateHandler;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class BotUpdatesListener implements UpdatesListener {
     private final UpdateHandler handler;
@@ -15,7 +16,7 @@ public class BotUpdatesListener implements UpdatesListener {
     @Override
     public int process(List<Update> updates) {
         for (var update : updates) {
-            handler.handleUpdate(update);
+            CompletableFuture.runAsync(() -> handler.handleUpdate(update));
         }
         return CONFIRMED_UPDATES_ALL;
     }

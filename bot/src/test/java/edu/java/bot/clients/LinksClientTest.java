@@ -3,10 +3,14 @@ package edu.java.bot.clients;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import edu.java.backoff.BackoffType;
 import edu.java.model.dto.LinkResponse;
 import edu.java.model.dto.ListLinksResponse;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +30,11 @@ public class LinksClientTest {
         wireMock.loadMappingsFrom(MAPPINGS);
         client = new ClientsConfiguration().linksClient(
             WebClient.builder(),
-            wmRuntimeInfo.getHttpBaseUrl()
+            wmRuntimeInfo.getHttpBaseUrl(),
+            BackoffType.EXPONENTIAL,
+            Duration.of(1, ChronoUnit.SECONDS),
+            10,
+            List.of()
         );
     }
 
